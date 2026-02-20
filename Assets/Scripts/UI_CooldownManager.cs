@@ -10,14 +10,11 @@ public class UI_CooldownManager : MonoBehaviour
     [SerializeField] private Image heal;
     [SerializeField] private Image kick;
     [SerializeField] private Image poke;
-    
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
+    [SerializeField] private Image[] globalCooldownImages;
+    
+    
+ 
     // Update is called once per frame
     void Update()
     {
@@ -25,5 +22,10 @@ public class UI_CooldownManager : MonoBehaviour
         heal.fillAmount = player.HealTimer / player.HealCooldown;
         kick.fillAmount = player.InterruptTimer / player.InterruptCooldown;
         poke.fillAmount = player.InstantCastTimer / player.InstantCooldown;
+
+        foreach (var gcd in globalCooldownImages)
+        {
+            gcd.fillAmount = player.GlobalCooldownTimer / player.GlobalCooldownDuration; 
+        }
     }
 }

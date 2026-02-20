@@ -7,7 +7,8 @@ public class DPSCalculator : MonoBehaviour
 {
     [SerializeField] private CombatEntity boss;
     [SerializeField] private TextMeshProUGUI dpsText;
-
+    [SerializeField] private TextMeshProUGUI timerText;
+    
     private float currentBossHealth;
     
     private float startingHealth;
@@ -16,6 +17,7 @@ public class DPSCalculator : MonoBehaviour
 
     private float currentDPS;
     private float finalDPS;
+    private float gametimer = 0f;
     
     
     struct DamageEntry
@@ -32,10 +34,17 @@ public class DPSCalculator : MonoBehaviour
         currentBossHealth = boss.MaxHealth;
         boss.OnHealthChanged += UpdateBossLife;
         dpsText.text = $"{0:F2}";
+        timerText.text= $"{gametimer}";
     }
 
     private void Update()
     {
+        if (currentBossHealth > 0)
+        {
+            gametimer += Time.deltaTime;
+        }
+
+        timerText.text= $"{gametimer:F1}";
         if (currentBossHealth <= 0)
         {
             finalDPS = currentDPS;

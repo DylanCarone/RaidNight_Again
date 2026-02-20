@@ -13,6 +13,15 @@ public class PlayerCombatEntity : CombatEntity
     [SerializeField] private float moveSpeed = 100f;
 
     private CharacterController controller;
+    private PlayerInput playerInput;
+
+    [Header("Global Cooldown")] 
+    [SerializeField] private float globalCooldown = 2f;
+
+    private float globalCooldownTimer = 0f;
+    public float GlobalCooldownTimer => globalCooldownTimer;
+    public float GlobalCooldownDuration => globalCooldown;
+    public bool IsOnGlobalCooldown => globalCooldownTimer > 0f;
 
     [Header("Fireball Spell")] 
     [SerializeField] private float fireballDamage = 300f;
@@ -55,16 +64,21 @@ public class PlayerCombatEntity : CombatEntity
 
     private BossCombatEntity currentTarget;
 
-    [Header("Settings")] [SerializeField] private Animator playerAnim;
+    [Header("Settings")] 
+    [SerializeField] private Animator playerAnim;
+
+    [SerializeField] private LayerMask losLayer;
     
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
+        playerInput = GetComponent<PlayerInput>();
         base.Awake();
     }
 
     void Start()
     {
+        playerInput.actions.Enable();
         xMoveInput.Enable();
         zMoveInput.Enable();
         lastPosition = transform.position;
@@ -76,6 +90,7 @@ public class PlayerCombatEntity : CombatEntity
 
     void Update()
     {
+        playerAnim.SetBool("Death", IsDead);
         if (IsDead) return;
         Vector3 targetPosition = currentTarget.transform.position;
         targetPosition.y = transform.position.y;
@@ -83,11 +98,15 @@ public class PlayerCombatEntity : CombatEntity
         HandleAnimations();
         CheckMovementInterrupt();
 
-        Vector3 movement = new Vector3(xMoveInput.ReadValue<float>(), 0, zMoveInput.ReadValue<float>());
+        //Vector3 movement = new Vector3(xMoveInput.ReadValue<float>(), 0, zMoveInput.ReadValue<float>());
+        Vector3 movement = new Vector3(playerInput.actions.FindAction("Movement").ReadValue<Vector2>().x , 0, playerInput.actions.FindAction("Movement").ReadValue<Vector2>().y);
         movement.Normalize();
-        controller.Move(movement * moveSpeed * Time.deltaTime);
+        controller.Move(movement * (moveSpeed * Time.deltaTime));
         playerAnim.SetFloat("Move", movement.magnitude);
 
+        if (globalCooldownTimer > 0)
+            globalCooldownTimer -= Time.deltaTime;
+        
         if (fireballTimer > 0) 
             fireballTimer -= Time.deltaTime;
         
@@ -114,22 +133,32 @@ public class PlayerCombatEntity : CombatEntity
         }
         
 
-        if (Keyboard.current.digit1Key.wasPressedThisFrame && CanAct())
+        if (playerInput.actions.FindAction("Ability 1").WasPressedThisFrame() && CanCastSpell())
             TryUseFireball();
-
-        if (Keyboard.current.digit2Key.wasPressedThisFrame && CanAct())
-            TryUseHeal();
         
-        if(Keyboard.current.digit3Key.wasPressedThisFrame && CanAct())
+        if(playerInput.actions.FindAction("Ability 2").WasPressedThisFrame() && CanCastSpell())
+            TryUseInstant();
+        
+        if(playerInput.actions.FindAction("Ability 3").WasPressedThisFrame() && CanCastSpell())
             TryUseInterrupt();
         
-        if(Keyboard.current.digit4Key.wasPressedThisFrame && CanAct())
-            TryUseInstant();
+        if (playerInput.actions.FindAction("Ability 4").WasPressedThisFrame() && CanCastSpell())
+            TryUseHeal();
                 
         base.Update();
         
     }
 
+    private bool CanCastSpell()
+    {
+        return CanAct() && !IsOnGlobalCooldown;
+    }
+
+    private void TriggerGlobalCooldown()
+    {
+        globalCooldownTimer = globalCooldown;
+    }
+    
     #region Interrupt Ability
     
     void TryUseInterrupt()
@@ -161,6 +190,7 @@ public class PlayerCombatEntity : CombatEntity
     {
         
         BeginCasting("Interrupt", 0);
+        TriggerGlobalCooldown();
         while (currentCastProgress < 0)
         {
             currentCastProgress += Time.deltaTime;
@@ -181,6 +211,7 @@ public class PlayerCombatEntity : CombatEntity
         target.InterruptCurrentCast();
         playerAnim.SetTrigger("Special2");
         interruptTimer = interruptCooldown;
+        
     }
     
     #endregion
@@ -207,6 +238,14 @@ public class PlayerCombatEntity : CombatEntity
             Debug.Log("Out of range!");
             return;
         }
+        Vector3 directionToBoss = (target.transform.position - transform.position).normalized;
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position, directionToBoss, out hit, distance, losLayer))
+        {
+            Debug.Log("Player has LOS of boss");
+            return;
+        }
 
         lastPosition = transform.position;
         StartCoroutine(CastFireball(target));
@@ -215,6 +254,7 @@ public class PlayerCombatEntity : CombatEntity
     private IEnumerator CastFireball(CombatEntity target)
     {
         BeginCasting("Fireball", fireballCastTime);
+        TriggerGlobalCooldown();
         Debug.Log("Casting Fireball....");
         
         
@@ -239,6 +279,8 @@ public class PlayerCombatEntity : CombatEntity
         target.TakeDamage(fireballDamage);
         playerAnim.SetTrigger("Special1");
         fireballTimer = fireballCooldown;
+        
+        
     }
     #endregion
     
@@ -272,6 +314,7 @@ public class PlayerCombatEntity : CombatEntity
     private IEnumerator CastHeal(CombatEntity target)
     {
         BeginCasting("Heal", healCastTime);
+        TriggerGlobalCooldown();
         Debug.Log("Casting Heal....");
         
         
@@ -315,7 +358,7 @@ public class PlayerCombatEntity : CombatEntity
         }
 
         float distance = Vector3.Distance(transform.position, target.transform.position);
-        if (distance > fireballRange)
+        if (distance > instantRange)
         {
             Debug.Log("Out of range!");
             return;
@@ -328,6 +371,7 @@ public class PlayerCombatEntity : CombatEntity
     private IEnumerator CastInstant(CombatEntity target)
     {
         BeginCasting("Instant", instantCastTime);
+        TriggerGlobalCooldown();
         Debug.Log("Casting Instant attack....");
         
         
@@ -368,7 +412,7 @@ public class PlayerCombatEntity : CombatEntity
         playerAnim.SetTrigger("Hit");
         if (current <= 0)
         {
-            playerAnim.SetTrigger("Death");
+            
         }
     }
     private void CheckMovementInterrupt()
