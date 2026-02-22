@@ -671,9 +671,9 @@ MonoBehaviour:
     m_Flags: 0
   moveSpeed: 4
   globalCooldown: 2
-  fireballDamage: 1000
+  fireballDamage: 150
   fireballCastTime: 2
-  fireballCooldown: 8
+  fireballCooldown: 0
   fireballRange: 25
   healAmount: 700
   healCastTime: 0

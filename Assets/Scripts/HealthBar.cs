@@ -15,10 +15,11 @@ public class HealthBar : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log(entity.CurrentHealth);
+        //Debug.Log(entity.CurrentHealth);
         healthBar.maxValue = entity.MaxHealth;
         healthBar.value = entity.CurrentHealth;
         entity.OnHealthChanged += UpdateHealth;
+        
     }
 
     private void OnDisable()

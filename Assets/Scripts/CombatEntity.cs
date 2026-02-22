@@ -3,6 +3,10 @@ using UnityEngine;
 
 public abstract class CombatEntity : MonoBehaviour
 {
+    [Header("Settings")] 
+    [SerializeField] private EntityType type;
+    public EntityType CurrentType => type;
+    
     [Header("Health")]
     [SerializeField] private float maxHealth = 1000f;
     private float currentHealth;
@@ -18,21 +22,18 @@ public abstract class CombatEntity : MonoBehaviour
     [SerializeField] private float attackDamage = 100f;
     [SerializeField] protected float attackRange = 3f;
     
-    private CombatEntity currentTarget;
+    protected CombatEntity currentTarget;
     private float autoAttackTimer = 0f;
     protected bool isAutoAttacking = false;
     private float attacksPerSecond;
-
-    
     
     // Spells
     protected bool isCasting = false;
-    protected string currentCastName = "";
-    protected float currentCastTime = 0f;
+    private string currentCastName = "";
+    private float currentCastTime = 0f;
     protected float currentCastProgress = 0f;
 
     public bool IsCasting => isCasting;
-    public string CurrentCastName => currentCastName;
     public float CastProgress => currentCastTime > 0 ? currentCastProgress / currentCastTime : 0f;
     
     // Events for UI and other updates later
@@ -59,7 +60,6 @@ public abstract class CombatEntity : MonoBehaviour
     }
 
     #region Auto Attacking
-
     
     private void UpdateAutoAttack()
     {
@@ -77,11 +77,9 @@ public abstract class CombatEntity : MonoBehaviour
         
         // check range
         float distance = Vector3.Distance(transform.position, currentTarget.transform.position);
-        if (distance > attackRange)
-        {
-            //Debug.Log($"{name} is out of range! cannot attack!");
+        if (distance > attackRange) // out of range
             return;
-        }
+        
 
         if (isCasting) return;
 
@@ -97,16 +95,15 @@ public abstract class CombatEntity : MonoBehaviour
     private void PerformAutoAttack()
     {
         //Debug.Log($"{name} attacks {currentTarget.name} for {attackDamage} damage!");
+        if (currentTarget.CurrentType == type) return; // dont attack if is friendly
         currentTarget.TakeDamage(attackDamage);
         OnAutoAttack?.Invoke();
     }
     public void StartAutoAttacking(CombatEntity target)
     {
         if (target == null || target.IsDead)
-        {
-            //Debug.Log($"{name} cannot attack null or dead target!");
             return;
-        }
+        
 
         if (isAutoAttacking && currentTarget == target)
             return;
@@ -117,7 +114,8 @@ public abstract class CombatEntity : MonoBehaviour
         
         //Debug.Log($"{name} starts attacking {target.name}");
     }
-    public void StopAutoAttacking()
+
+    private void StopAutoAttacking()
     {
         isAutoAttacking = false;
         currentTarget = null;
@@ -135,14 +133,12 @@ public abstract class CombatEntity : MonoBehaviour
         if (isDead) return;
 
         currentHealth = Mathf.Max(0, currentHealth - damage);
-        //Debug.Log($"{name} took {damage} damage. Health: {currentHealth}/{maxHealth}");
         
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
 
         if (currentHealth <= 0)
-        {
             Die();
-        }
+        
     }
 
     public void Heal(float amount)
@@ -150,9 +146,7 @@ public abstract class CombatEntity : MonoBehaviour
         if (isDead) return;
 
         currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
-        
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
-        Debug.Log($"{name} healed for {amount} HP. Health: {currentHealth}/{maxHealth}");
     }
 
     protected virtual void Die()
@@ -160,8 +154,6 @@ public abstract class CombatEntity : MonoBehaviour
         if (isDead) return;
 
         isDead = true;
-        //Debug.Log($"{name} has died!");
-        
         OnDeath?.Invoke();
     }
 
@@ -169,7 +161,7 @@ public abstract class CombatEntity : MonoBehaviour
 
     #region Casting
 
-    public void BeginCasting(string abilityName, float castTime)
+    protected void BeginCasting(string abilityName, float castTime)
     {
         if (!CanAct()) return;
 
@@ -180,31 +172,36 @@ public abstract class CombatEntity : MonoBehaviour
         OnCastStart.Invoke(abilityName,castTime);
     }
 
-    public void UpdateCastProgress(float progress)
+    protected void UpdateCastProgress(float progress)
     {
         currentCastProgress = progress;
     }
 
-    public void CompleteCast()
+    protected void CompleteCast()
     {
         isCasting = false;
         OnCastComplete.Invoke(currentCastName);
-        currentCastName = "";
 
         autoAttackTimer = 1f / attacksPerSecond;
     }
 
-    public void InterruptCast()
+    protected void InterruptCast()
     {
         isCasting = false;
         OnCastInterrupted.Invoke(currentCastName);
-        currentCastName = "";
     }
 
     #endregion
-    public bool CanAct()
+
+    protected bool CanAct()
     {
         return !isDead && !isCasting;
     }
 
+}
+
+public enum EntityType
+{
+    Player,
+    Boss
 }

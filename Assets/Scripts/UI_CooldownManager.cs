@@ -1,27 +1,55 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class UI_CooldownManager : MonoBehaviour
 {
     [Header("Settings")] [SerializeField] private PlayerCombatEntity player;
+    [Header("Spell Icons")]
+    [SerializeField] private Image squareIcon;
+    [SerializeField] private Image triangleIcon;
+    [SerializeField] private Image circleIcon;
+    [SerializeField] private Image xIcon;
     
-    [Header("Images")]
-    [SerializeField] private Image fireball;
-    [SerializeField] private Image heal;
-    [SerializeField] private Image kick;
-    [SerializeField] private Image poke;
+    
+    [Header("Cooldown Images")]
+    [SerializeField] private Image squareCooldown;
+    [SerializeField] private Image triangleCooldown;
+    [SerializeField] private Image circleCooldown;
+    [SerializeField] private Image xCooldown;
 
     [SerializeField] private Image[] globalCooldownImages;
+
+
+    private void Start()
+    {
+        DisableGCDs();
+        squareIcon.sprite = player.SquareSpell.ability.icon;
+        triangleIcon.sprite = player.TriangleSpell.ability.icon;
+        circleIcon.sprite = player.CircleSpell.ability.icon;
+        xIcon.sprite = player.XSpell.ability.icon;
+        
+    }
+
+    void DisableGCDs()
+    {
+        if(!player.SquareSpell.ability.isOnGDC)
+            globalCooldownImages[0].enabled = false;
+        if(!player.TriangleSpell.ability.isOnGDC)
+            globalCooldownImages[1].enabled = false;
+        if(!player.CircleSpell.ability.isOnGDC)
+            globalCooldownImages[2].enabled = false;
+        if(!player.XSpell.ability.isOnGDC)
+            globalCooldownImages[3].enabled = false;
+    }
     
-    
- 
     // Update is called once per frame
     void Update()
     {
-        fireball.fillAmount = player.FireballTimer/player.FireballCooldown;
-        heal.fillAmount = player.HealTimer / player.HealCooldown;
-        kick.fillAmount = player.InterruptTimer / player.InterruptCooldown;
-        poke.fillAmount = player.InstantCastTimer / player.InstantCooldown;
+        squareCooldown.fillAmount = player.SquareSpell.GetCooldownPercent();
+        triangleCooldown.fillAmount = player.TriangleSpell.GetCooldownPercent();
+        circleCooldown.fillAmount = player.CircleSpell.GetCooldownPercent();
+        xCooldown.fillAmount = player.XSpell.GetCooldownPercent();
 
         foreach (var gcd in globalCooldownImages)
         {
