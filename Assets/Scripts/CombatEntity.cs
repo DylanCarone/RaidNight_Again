@@ -169,7 +169,7 @@ public abstract class CombatEntity : MonoBehaviour
         currentCastName = abilityName;
         currentCastTime = castTime;
         currentCastProgress = 0;
-        OnCastStart.Invoke(abilityName,castTime);
+        OnCastStart?.Invoke(abilityName,castTime);
     }
 
     protected void UpdateCastProgress(float progress)
@@ -180,7 +180,7 @@ public abstract class CombatEntity : MonoBehaviour
     protected void CompleteCast()
     {
         isCasting = false;
-        OnCastComplete.Invoke(currentCastName);
+        OnCastComplete?.Invoke(currentCastName);
 
         autoAttackTimer = 1f / attacksPerSecond;
     }
@@ -188,7 +188,7 @@ public abstract class CombatEntity : MonoBehaviour
     protected void InterruptCast()
     {
         isCasting = false;
-        OnCastInterrupted.Invoke(currentCastName);
+        OnCastInterrupted?.Invoke(currentCastName);
     }
 
     #endregion

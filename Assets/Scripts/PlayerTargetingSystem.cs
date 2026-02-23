@@ -7,6 +7,14 @@ public class PlayerTargetingSystem : MonoBehaviour
     [SerializeField] private PlayerCombatEntity player;
 
 
+    private void Start()
+    {
+        if (player.Role == PlayerRole.Healer)
+        {
+            player.SetTarget(TargetPlayerRole(PlayerRole.Tank));
+        }
+    }
+
     private void Update()
     {
         if (player.Role != PlayerRole.Healer)

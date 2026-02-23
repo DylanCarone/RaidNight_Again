@@ -19,14 +19,14 @@ public abstract class BossCombatEntity : CombatEntity
     protected Coroutine currentCastRoutine;
     private bool canBeInterrupted = false;
     protected bool castInterrupted = false;
-    private bool lookingAtPlayer = true;
+    protected bool lookingAtPlayer = true;
 
     
     private bool isInCombat = false;
 
     private int attackID;
 
-    private void Start()
+    protected void Start()
     {
         currentTarget = FindNearestPlayer();
         agent.SetDestination(currentTarget.gameObject.transform.position);
