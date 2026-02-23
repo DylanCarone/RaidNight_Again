@@ -19,6 +19,10 @@ public class UI_CooldownManager : MonoBehaviour
     [SerializeField] private Image xCooldown;
 
     [SerializeField] private Image[] globalCooldownImages;
+    [SerializeField] private Image squareOutOfRangeImage;
+    [SerializeField] private Image triOutOfRangeImage;
+    [SerializeField] private Image circleOutOfRangeImage;
+    [SerializeField] private Image xOutOfRangeImage;
 
 
     private void Start()
@@ -55,5 +59,10 @@ public class UI_CooldownManager : MonoBehaviour
         {
             gcd.fillAmount = player.GlobalCooldownTimer / player.GlobalCooldownDuration; 
         }
+
+        squareOutOfRangeImage.enabled = player.TargetRange > player.SquareSpell.ability.range;
+        triOutOfRangeImage.enabled = player.TargetRange > player.TriangleSpell.ability.range;
+        circleOutOfRangeImage.enabled = player.TargetRange > player.CircleSpell.ability.range;
+        xOutOfRangeImage.enabled = player.TargetRange > player.XSpell.ability.range;
     }
 }

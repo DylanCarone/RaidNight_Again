@@ -10,7 +10,7 @@ public abstract class CombatEntity : MonoBehaviour
     [Header("Health")]
     [SerializeField] private float maxHealth = 1000f;
     private float currentHealth;
-    private bool isDead = false;
+    protected bool isDead = false;
     
     public float CurrentHealth => currentHealth;
     public float MaxHealth => maxHealth;
@@ -61,7 +61,7 @@ public abstract class CombatEntity : MonoBehaviour
 
     #region Auto Attacking
     
-    private void UpdateAutoAttack()
+    protected virtual void UpdateAutoAttack()
     {
         
         // count up timer, when finished, deal damage to target and then reset the timer

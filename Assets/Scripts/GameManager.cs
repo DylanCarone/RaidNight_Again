@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     {
         if (gameOver)
         {
-            if ((Keyboard.current.spaceKey.wasPressedThisFrame || Gamepad.current.buttonSouth.wasPressedThisFrame) && canRestart)
+            if ((Keyboard.current.spaceKey.wasPressedThisFrame || Gamepad.current.startButton.wasPressedThisFrame) && canRestart)
             {
                 SceneManager.LoadScene(0);
             }
@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
 
         
         CheckWinner();
-        if ((Keyboard.current.spaceKey.wasPressedThisFrame || Gamepad.current.buttonSouth.wasPressedThisFrame) && !gameStarted)
+        if ((Keyboard.current.spaceKey.wasPressedThisFrame || Gamepad.current.startButton.wasPressedThisFrame) && !gameStarted)
         {
             StartCoroutine(StartGame());
         }

@@ -136,6 +136,60 @@ public partial class @PlayerControlInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Ability 5"",
+                    ""type"": ""Button"",
+                    ""id"": ""d8dbeb3b-017d-4b8a-90ab-946158108cd4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Super Ability"",
+                    ""type"": ""Button"",
+                    ""id"": ""73596f2e-ae3f-4d1b-b84e-7bca22a1d642"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Target North"",
+                    ""type"": ""Button"",
+                    ""id"": ""69598119-2b06-4e39-95d1-8c9fdae63da9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Target South"",
+                    ""type"": ""Button"",
+                    ""id"": ""be99ff1c-3e2f-4fab-a441-94f137b5938d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Target East"",
+                    ""type"": ""Button"",
+                    ""id"": ""db3c0c04-786a-485d-be80-418aa456642a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Target West"",
+                    ""type"": ""Button"",
+                    ""id"": ""4f62010a-e1e9-463b-be19-0ef7bbe77ccc"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -292,6 +346,94 @@ public partial class @PlayerControlInput: IInputActionCollection2, IDisposable
                     ""action"": ""Ability 4"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e8fa070f-d412-4e05-b6a4-278bb781a32d"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ability 5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fa6ace70-51d1-4f2c-a8dd-268de74c02b1"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Ability 5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""57507d63-2959-478b-909b-4e18ed0d0aa3"",
+                    ""path"": ""<Keyboard>/6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Super Ability"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6477469b-c021-4b33-ac7a-dbf959c7aaa5"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Super Ability"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2c7ed2a9-f891-4cfc-b7cf-7abef0db4962"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Target North"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e1fe61e1-4000-4d02-ab76-be2ee02e370d"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Target South"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a0170a5e-24fd-4f44-9e13-cddce08a2ab7"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Target East"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""37386bc9-95c7-4ee0-9f38-32c228b830f3"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Target West"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -322,6 +464,12 @@ public partial class @PlayerControlInput: IInputActionCollection2, IDisposable
         m_Gameplay_Ability2 = m_Gameplay.FindAction("Ability 2", throwIfNotFound: true);
         m_Gameplay_Ability3 = m_Gameplay.FindAction("Ability 3", throwIfNotFound: true);
         m_Gameplay_Ability4 = m_Gameplay.FindAction("Ability 4", throwIfNotFound: true);
+        m_Gameplay_Ability5 = m_Gameplay.FindAction("Ability 5", throwIfNotFound: true);
+        m_Gameplay_SuperAbility = m_Gameplay.FindAction("Super Ability", throwIfNotFound: true);
+        m_Gameplay_TargetNorth = m_Gameplay.FindAction("Target North", throwIfNotFound: true);
+        m_Gameplay_TargetSouth = m_Gameplay.FindAction("Target South", throwIfNotFound: true);
+        m_Gameplay_TargetEast = m_Gameplay.FindAction("Target East", throwIfNotFound: true);
+        m_Gameplay_TargetWest = m_Gameplay.FindAction("Target West", throwIfNotFound: true);
     }
 
     ~@PlayerControlInput()
@@ -407,6 +555,12 @@ public partial class @PlayerControlInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Ability2;
     private readonly InputAction m_Gameplay_Ability3;
     private readonly InputAction m_Gameplay_Ability4;
+    private readonly InputAction m_Gameplay_Ability5;
+    private readonly InputAction m_Gameplay_SuperAbility;
+    private readonly InputAction m_Gameplay_TargetNorth;
+    private readonly InputAction m_Gameplay_TargetSouth;
+    private readonly InputAction m_Gameplay_TargetEast;
+    private readonly InputAction m_Gameplay_TargetWest;
     /// <summary>
     /// Provides access to input actions defined in input action map "Gameplay".
     /// </summary>
@@ -438,6 +592,30 @@ public partial class @PlayerControlInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Gameplay/Ability4".
         /// </summary>
         public InputAction @Ability4 => m_Wrapper.m_Gameplay_Ability4;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/Ability5".
+        /// </summary>
+        public InputAction @Ability5 => m_Wrapper.m_Gameplay_Ability5;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/SuperAbility".
+        /// </summary>
+        public InputAction @SuperAbility => m_Wrapper.m_Gameplay_SuperAbility;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/TargetNorth".
+        /// </summary>
+        public InputAction @TargetNorth => m_Wrapper.m_Gameplay_TargetNorth;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/TargetSouth".
+        /// </summary>
+        public InputAction @TargetSouth => m_Wrapper.m_Gameplay_TargetSouth;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/TargetEast".
+        /// </summary>
+        public InputAction @TargetEast => m_Wrapper.m_Gameplay_TargetEast;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/TargetWest".
+        /// </summary>
+        public InputAction @TargetWest => m_Wrapper.m_Gameplay_TargetWest;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -479,6 +657,24 @@ public partial class @PlayerControlInput: IInputActionCollection2, IDisposable
             @Ability4.started += instance.OnAbility4;
             @Ability4.performed += instance.OnAbility4;
             @Ability4.canceled += instance.OnAbility4;
+            @Ability5.started += instance.OnAbility5;
+            @Ability5.performed += instance.OnAbility5;
+            @Ability5.canceled += instance.OnAbility5;
+            @SuperAbility.started += instance.OnSuperAbility;
+            @SuperAbility.performed += instance.OnSuperAbility;
+            @SuperAbility.canceled += instance.OnSuperAbility;
+            @TargetNorth.started += instance.OnTargetNorth;
+            @TargetNorth.performed += instance.OnTargetNorth;
+            @TargetNorth.canceled += instance.OnTargetNorth;
+            @TargetSouth.started += instance.OnTargetSouth;
+            @TargetSouth.performed += instance.OnTargetSouth;
+            @TargetSouth.canceled += instance.OnTargetSouth;
+            @TargetEast.started += instance.OnTargetEast;
+            @TargetEast.performed += instance.OnTargetEast;
+            @TargetEast.canceled += instance.OnTargetEast;
+            @TargetWest.started += instance.OnTargetWest;
+            @TargetWest.performed += instance.OnTargetWest;
+            @TargetWest.canceled += instance.OnTargetWest;
         }
 
         /// <summary>
@@ -505,6 +701,24 @@ public partial class @PlayerControlInput: IInputActionCollection2, IDisposable
             @Ability4.started -= instance.OnAbility4;
             @Ability4.performed -= instance.OnAbility4;
             @Ability4.canceled -= instance.OnAbility4;
+            @Ability5.started -= instance.OnAbility5;
+            @Ability5.performed -= instance.OnAbility5;
+            @Ability5.canceled -= instance.OnAbility5;
+            @SuperAbility.started -= instance.OnSuperAbility;
+            @SuperAbility.performed -= instance.OnSuperAbility;
+            @SuperAbility.canceled -= instance.OnSuperAbility;
+            @TargetNorth.started -= instance.OnTargetNorth;
+            @TargetNorth.performed -= instance.OnTargetNorth;
+            @TargetNorth.canceled -= instance.OnTargetNorth;
+            @TargetSouth.started -= instance.OnTargetSouth;
+            @TargetSouth.performed -= instance.OnTargetSouth;
+            @TargetSouth.canceled -= instance.OnTargetSouth;
+            @TargetEast.started -= instance.OnTargetEast;
+            @TargetEast.performed -= instance.OnTargetEast;
+            @TargetEast.canceled -= instance.OnTargetEast;
+            @TargetWest.started -= instance.OnTargetWest;
+            @TargetWest.performed -= instance.OnTargetWest;
+            @TargetWest.canceled -= instance.OnTargetWest;
         }
 
         /// <summary>
@@ -593,5 +807,47 @@ public partial class @PlayerControlInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnAbility4(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Ability 5" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnAbility5(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Super Ability" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSuperAbility(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Target North" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTargetNorth(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Target South" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTargetSouth(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Target East" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTargetEast(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Target West" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnTargetWest(InputAction.CallbackContext context);
     }
 }

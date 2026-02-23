@@ -6,6 +6,9 @@ public class AbilityInstance
     public Ability ability;
     private float currentCooldown;
 
+    private bool canCast;
+    public bool CanCast => canCast;
+
     public AbilityInstance(Ability ability)
     {
         this.ability = ability;

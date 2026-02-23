@@ -31,7 +31,7 @@ public class Ability : ScriptableObject
 
         if (healing > 0)
         {
-            CombatEntity healingTarget = caster;
+            CombatEntity healingTarget = target;
             healingTarget.Heal(healing);
         }
         

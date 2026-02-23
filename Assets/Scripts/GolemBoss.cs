@@ -16,8 +16,8 @@ public class GolemBoss : BossCombatEntity
     {
         while (!IsDead)
         {
-            
-            yield return UseAttack(overdrive);
+            yield return new WaitForSeconds(4f);
+            yield return UseAttack(slam);
             
         }
     }

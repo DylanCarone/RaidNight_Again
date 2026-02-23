@@ -32,16 +32,24 @@ public abstract class BossCombatEntity : CombatEntity
         agent.SetDestination(currentTarget.gameObject.transform.position);
         OnAutoAttack += () =>
         {
-            bossAnim.SetTrigger("Auto");
+            if (bossUI == null) return;
+            bossAnim?.SetTrigger("Auto");
             ChooseRandomAttackAnimation();
         };
         OnHealthChanged += BossHit;
+        
+        
     }
 
     protected void Update()
     {
         HandleAnimations(); 
         if (IsDead) return;
+
+        if (currentTarget.IsDead)
+        {
+            currentTarget = GetPriorityTarget();
+        }
         if (lookingAtPlayer)
         {
             Vector3 targetPosition = currentTarget.transform.position;
@@ -49,10 +57,11 @@ public abstract class BossCombatEntity : CombatEntity
             transform.LookAt(targetPosition);
         }
 
-        if (currentTarget.IsDead)
+        if (currentTarget == null)
         {
             StopAllCoroutines();
             agent.isStopped = true;
+            return;
         }
         
         // Look for players to attack
@@ -67,11 +76,17 @@ public abstract class BossCombatEntity : CombatEntity
         // Continue auto-attacking
         base.Update();
     }
+
+    protected override void UpdateAutoAttack()
+    {
+        currentTarget = GetPriorityTarget();
+        base.UpdateAutoAttack();
+    }
     
     private void CheckForPlayer()
     {
         // Find player
-        PlayerCombatEntity player = FindObjectOfType<PlayerCombatEntity>();
+        PlayerCombatEntity player = GetPriorityTarget() as PlayerCombatEntity;
         
         if (player == null || player.IsDead)
             return;
@@ -127,8 +142,7 @@ public abstract class BossCombatEntity : CombatEntity
     private IEnumerator CastAbility(BossAbility ability, GameObject telegraph = null)
     {
         agent.isStopped = true;
-        if (telegraph == null)
-            currentTarget = FindNearestPlayer();
+        
         canBeInterrupted = ability.isInterruptible;
         BeginCasting(ability.abilityName, ability.castTime);
         castInterrupted = false;
@@ -170,7 +184,7 @@ public abstract class BossCombatEntity : CombatEntity
         if (target != null && !target.IsDead)
         {
             target.TakeDamage(ability.damage);
-            bossAnim.SetTrigger(ability.animation.ToString());
+            bossAnim?.SetTrigger(ability.animation.ToString());
         }
     }
 
@@ -184,12 +198,12 @@ public abstract class BossCombatEntity : CombatEntity
                 player.TakeDamage(ability.damage);
             
         }
-        bossAnim.SetTrigger(ability.animation.ToString());
+        bossAnim?.SetTrigger(ability.animation.ToString());
     }
 
     private void UseLineAOE(BossAbility ability)
     {
-        bossAnim.SetTrigger(ability.animation.ToString());
+        bossAnim?.SetTrigger(ability.animation.ToString());
         Vector3 center = transform.position + transform.forward * (ability.range / 2f);
         Vector3 halfExtents = new Vector3(ability.range / 2f, 0.25f, ability.range / 2f);
         
@@ -222,7 +236,7 @@ public abstract class BossCombatEntity : CombatEntity
         }
         
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, ability.range);
-        bossAnim.SetTrigger(ability.animation.ToString());
+        bossAnim?.SetTrigger(ability.animation.ToString());
 
         foreach (var colliders in hitColliders)
         {
@@ -291,28 +305,31 @@ public abstract class BossCombatEntity : CombatEntity
 
     void HandleAnimations()
     {
-        bossAnim.SetFloat("Walk", agent.velocity.magnitude);
-        bossAnim.SetBool("IsCasting", isCasting);
+        if (bossAnim == null) return;
+        bossAnim?.SetFloat("Walk", agent.velocity.magnitude);
+        bossAnim?.SetBool("IsCasting", isCasting);
 
         if (currentTarget.IsDead)
         {
-            bossAnim.SetBool("Win", true);
+            bossAnim?.SetBool("Win", true);
         }
     }
 
     void ChooseRandomAttackAnimation()
     {
+        if(bossAnim == null) return;
         attackID = Random.Range(0, 2);
-        bossAnim.SetFloat("AttackID", attackID);
+        bossAnim?.SetFloat("AttackID", attackID);
     }
 
     
     void BossHit(float current, float max)
     {
-        bossAnim.SetTrigger("Hit");
+        if(bossAnim == null) return;
+        bossAnim?.SetTrigger("Hit");
         if (current <= 0)
         {
-            bossAnim.SetTrigger("Died");
+            bossAnim?.SetTrigger("Died");
         }
         
     }
@@ -330,6 +347,69 @@ public abstract class BossCombatEntity : CombatEntity
         base.Die();
     }
 
+    private void SwitchTarget()
+    {
+        currentTarget = GetPriorityTarget();
+    }
+
+    private CombatEntity GetPriorityTarget()
+    {
+        PlayerCombatEntity[] players = FindObjectsByType<PlayerCombatEntity>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+
+        PlayerCombatEntity prioTarget = null;
+        int highestPriority = -1;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (var player in players)
+        {
+            if (player == null || player.IsDead) continue;
+
+            int currentPriority = 0;
+            switch (player.Role)
+            {
+                case PlayerRole.Tank: currentPriority = 3; break; 
+                case PlayerRole.Melee: currentPriority = 2; break; 
+                case PlayerRole.Ranged: currentPriority = 1; break; 
+                case PlayerRole.Healer: currentPriority = 0; break; 
+            }
+
+            if (currentPriority > highestPriority)
+            {
+                highestPriority = currentPriority;
+                prioTarget = player;
+                closestDistance = Vector3.Distance(transform.position, player.transform.position);
+            }
+            else if (currentPriority == highestPriority)
+            {
+                    prioTarget = player;
+            }
+        }
+
+        return prioTarget;
+    }
+
     
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
