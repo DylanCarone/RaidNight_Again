@@ -46,9 +46,9 @@ public class LobbyManager : MonoBehaviour
 
     private void Update()
     {
-        if (Gamepad.current != null && Gamepad.current.startButton.wasPressedThisFrame && numPlayers >= 2)
+        if (Gamepad.current != null && Gamepad.current.startButton.wasPressedThisFrame && numPlayers >= 1)
         {
-            SceneManager.LoadScene("test_spawnsprite");
+            SceneManager.LoadScene("Scenes/TrainingRoom");
         }
     }
 

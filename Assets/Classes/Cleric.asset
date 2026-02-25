@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd83ca01a420bee4c902ee8a8f2a7b30, type: 3}
+  m_Name: Cleric
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterData
+  playerModel: {fileID: 3510168661903893147, guid: e500c5ddf7e3e8643922edb3af306d69, type: 3}
+  role: 1
+  className: Cleric
+  maxHealth: 1000
+  attackSpeed: 999
+  attackDamage: 0
+  attackRange: 0
+  abilities:
+  - {fileID: 11400000, guid: fd1095f947f127b468a6c50fd3e31647, type: 2}
+  - {fileID: 11400000, guid: c3630dacf04bd3747bb187908e7d7541, type: 2}
+  - {fileID: 11400000, guid: 465e1dada760b5946ac69127a956b6e3, type: 2}
+  - {fileID: 11400000, guid: 5eed59b6e6f0ccf4895c98026932b89a, type: 2}
+  - {fileID: 11400000, guid: 6a43d66fc115b86419e1c659f760f386, type: 2}
+  - {fileID: 11400000, guid: 6a43d66fc115b86419e1c659f760f386, type: 2}
+  resourceType: 0
+  maxResource: 120
+  regenPerSecond: 4
+  startFull: 1
+  autoRegenerate: 1
+  restoreOnAutoAttack: 0
+  restoreResourceOnHit: 0

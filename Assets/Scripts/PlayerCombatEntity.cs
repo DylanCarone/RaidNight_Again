@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mono.Cecil;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,17 +10,22 @@ using UnityEngine.InputSystem.Users;
 
 public class PlayerCombatEntity : CombatEntity
 {
-    [SerializeField] private PlayerRole playerRole;
+    [Header("Settings")] 
+    [SerializeField] CharacterData characterData;
+    [SerializeField] Transform spawnTempTransform;
+    private Animator playerAnim;
+    [SerializeField] private LayerMask losLayer;
+    private Vector3 lastPosition;
+    private float movementThreshold = 0.01f;
+    private Vector3 movement;
+    private PlayerRole playerRole;
     public PlayerRole Role => playerRole;
-    public int controllerIndex = 0;
-    [Header("Movement")] 
-    [SerializeField] private float moveSpeed = 100f;
 
+    [Header("Movement")] 
+    [SerializeField] private float moveSpeed = 4f;
     private CharacterController controller;
     private PlayerInput playerInput;
     public PlayerInput Inputs => playerInput;
-    private bool isOccupied = false;
-    public bool IsOccupied => isOccupied;
     
     [Header("Global Cooldown")] 
     [SerializeField] private float globalCooldown = 2f;
@@ -27,97 +33,120 @@ public class PlayerCombatEntity : CombatEntity
     private float globalCooldownTimer = 0f;
     public float GlobalCooldownTimer => globalCooldownTimer;
     public float GlobalCooldownDuration => globalCooldown;
-    public bool IsOnGlobalCooldown => globalCooldownTimer > 0f;
+    private bool IsOnGlobalCooldown => globalCooldownTimer > 0f;
     
-    
-    [Header("Spell Book")] 
-    [SerializeField] private AbilityInstance squareSpell;
-    [SerializeField] private AbilityInstance triangleSpell;
-    [SerializeField] private AbilityInstance circleSpell;
-    [SerializeField] private AbilityInstance xSpell;
-    private List<AbilityInstance> spells = new  List<AbilityInstance>();
+    // resource
+    private ResourceType resourceType;
+    public ResourceType ResourceType => resourceType;
+    private float maxResoruce;
+    public float MaxResoruce => maxResoruce;
+    private float currentResource;
+    public float CurrentResource => currentResource;
+    public Action<float> OnResourceChanged;
+    private float regenPerSecond;
+   
+    // Spells
+    private AbilityInstance squareSpell;
+    private AbilityInstance triangleSpell;
+    private AbilityInstance circleSpell;
+    private AbilityInstance xSpell;
     public AbilityInstance SquareSpell => squareSpell;
     public AbilityInstance TriangleSpell => triangleSpell;
     public AbilityInstance CircleSpell => circleSpell;
     public AbilityInstance XSpell => xSpell;
-
+    
+    private List<AbilityInstance> spells = new List<AbilityInstance>();
+    public List<AbilityInstance> Spells => spells;
+    
+    // Targeting
     private float targetRange;
     public float TargetRange => targetRange;
+    private BossCombatEntity cachedBoss;
     
+    bool isInitialized = false;
 
-    [Header("Settings")] 
-    [SerializeField] private Animator playerAnim;
-    [SerializeField] private LayerMask losLayer;
-    private Vector3 lastPosition;
-    private float movementThreshold = 0.01f;
-    private Vector3 movement;
+    [SerializeField] ParticleSystem castingParticles;
+    [SerializeField] private GameObject attackParticles;
+
+    #region Initialization
+
+    /// <summary>
+    /// Initializes player for multiplayer. Called by PlayerManager.
+    /// If not called externally, Start() will initialize with default data.
+    /// </summary>
+    public void Initialize(CharacterData characterData, PlayerInput inputs, GameObject model)
+    {
+        this.characterData = characterData;
+        playerRole = characterData.role;
+        playerAnim = model.GetComponent<Animator>();
+        playerInput = inputs;
+        AddSpells();
+        if(playerInput)
+            playerInput.actions.Enable();
+        maxHealth = characterData.maxHealth;
+        attackSpeed = characterData.attackSpeed;
+        attackDamage = characterData.attackDamage;
+        attackRange = characterData.attackRange;
+        resourceType =  characterData.resourceType;
+        maxResoruce = characterData.maxResource;
+        regenPerSecond = characterData.regenPerSecond;
+        
+        if(characterData.startFull)
+            currentResource = maxResoruce;
+        if (characterData.restoreResourceOnHit)
+            OnTakeDamage += RestoreResourceOnHit;
+        
+        isInitialized = true;
+        
+
+    } 
     
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
-        playerInput = GetComponent<PlayerInput>();
-        if(playerInput)
-            playerInput.actions.Enable();
-        
+        //playerInput = GetComponent<PlayerInput>();
         //Debug.Log(playerInput.playerIndex);
-
+        
         base.Awake();
     }
 
-    public void SetPlayerController(PlayerInput input)
-    {
-        playerInput = input;
-        isOccupied = true;
-        playerInput.actions.Enable();
-    }
 
-    public void ReleaseController()
-    {
-        if(playerInput != null) Destroy(playerInput.gameObject);
-        isOccupied = false;
-        playerInput.actions.Disable();
-    }
     void Start()
     {
         lastPosition = transform.position;
         //currentTarget = FindNearestEnemy();
         OnHealthChanged += HandleHitAnimations;
         OnAutoAttack += () => playerAnim.SetTrigger("Attack");
-        AddSpells();
+
+        if (!isInitialized && characterData != null)
+        {
+            Debug.Log("Not initialized yet, doing now");
+            PlayerInput input = GetComponent<PlayerInput>();
+            var model = Instantiate(characterData.playerModel, spawnTempTransform.position, spawnTempTransform.rotation, spawnTempTransform);
+            Initialize(characterData, input, model);
+        }
+        cachedBoss = FindObjectOfType<BossCombatEntity>();
+        currentHealth = maxHealth;
     }
 
     void AddSpells()
     {
+        Debug.Log("Adding spells");
+        squareSpell = new AbilityInstance(characterData.abilities[0]);
+        triangleSpell = new AbilityInstance(characterData.abilities[1]);
+        circleSpell = new AbilityInstance(characterData.abilities[2]);
+        xSpell = new AbilityInstance(characterData.abilities[3]);
         spells.Add(squareSpell);
-        spells.Add(triangleSpell);
         spells.Add(circleSpell);
+        spells.Add(triangleSpell);
         spells.Add(xSpell);
     }
-
-    void SetControllerIndex()
-    {
-        if (!playerInput.user.valid)
-        {
-            // This force-creates the user link if it's missing in the scene
-            playerInput.SwitchCurrentControlScheme(Gamepad.all[controllerIndex]);
-        }
-        if (Gamepad.all.Count > controllerIndex)
-        {
-            // This is the "Magic Line"
-            // It unpairs all devices and pairs ONLY the specific gamepad index
-            playerInput.user.UnpairDevices();
-            InputUser.PerformPairingWithDevice(Gamepad.all[controllerIndex], playerInput.user);
-            
-            //Debug.Log($"Player {gameObject.name} paired to {Gamepad.all[controllerIndex].name}");
-        }
-        else
-        {
-            Debug.LogWarning($"Controller index {controllerIndex} not found! Use Keyboard?");
-        }
-    }
+    
+    #endregion
 
     protected void Update()
     {
+        if (!isInitialized) return;
         playerAnim.SetBool("Death", IsDead);
         if (IsDead) return;
         
@@ -126,9 +155,11 @@ public class PlayerCombatEntity : CombatEntity
         LookAtTarget();
         HandleInputs();
         HandleCooldowns();
+        if(characterData.autoRegenerate)
+            UpdateResourceRegen();
         
 
-        if (!isAutoAttacking && playerRole != PlayerRole.Healer)
+        if (!isAutoAttacking && Role != PlayerRole.Healer)
         {
             CombatEntity enemy = FindNearestEnemy();
             if (enemy != null)
@@ -152,56 +183,12 @@ public class PlayerCombatEntity : CombatEntity
         
     }
 
-    private void LookAtTarget()
+    protected override void PerformAutoAttack()
     {
-        if (currentTarget == null || currentTarget == this)
-        {
-            // 1. Get the camera's forward and right vectors
-            Vector3 camForward = Camera.main.transform.forward;
-            Vector3 camRight = Camera.main.transform.right;
-
-            // 2. Flatten them so we don't look "up" into the sky or "down" into the floor
-            camForward.y = 0;
-            camRight.y = 0;
-            camForward.Normalize();
-            camRight.Normalize();
-
-            // 3. Create a movement direction relative to the camera
-            Vector3 relativeMovement = (camForward * movement.z) + (camRight * movement.x);
-
-            if (relativeMovement.sqrMagnitude > 0.01f)
-            {
-                Quaternion newRotation = Quaternion.LookRotation(relativeMovement);
-                transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * 10f);
-            }
-
-            return;
-        }
+        if(characterData.restoreOnAutoAttack)
+            RestoreResource(regenPerSecond);
         
-        
-        if (currentTarget != null) 
-        {
-            Vector3 targetPosition = currentTarget.transform.position;
-            targetPosition.y = transform.position.y;
-            transform.LookAt(targetPosition);
-            return;
-        }
-        
-        
-        
-    }
-
-    private void HandleCooldowns()
-    {
-        if (globalCooldownTimer > 0)
-            globalCooldownTimer -= Time.deltaTime;
-
-        foreach (var spell in spells)
-        {
-            if(!spell.IsReady())
-                spell.UpdateCooldown(Time.deltaTime);
-        }
-
+        base.PerformAutoAttack();
     }
 
     private void HandleInputs()
@@ -214,32 +201,32 @@ public class PlayerCombatEntity : CombatEntity
         playerAnim.SetFloat("Move", movement.magnitude);
         
         if (playerInput.actions.FindAction("Ability 1").WasPressedThisFrame() && CanCastSpell())
-            TryUseSpell(squareSpell);
+            TryCastSpell(squareSpell);
         
         if(playerInput.actions.FindAction("Ability 2").WasPressedThisFrame() && CanCastSpell())
-            TryUseSpell(xSpell);
+            TryCastSpell(xSpell);
             
         
         if(playerInput.actions.FindAction("Ability 3").WasPressedThisFrame() && CanAct())
-            TryUseSpell(circleSpell);
+            TryCastSpell(circleSpell);
         
         if (playerInput.actions.FindAction("Ability 4").WasPressedThisFrame() && CanCastSpell())
-            TryUseSpell(triangleSpell);
+            TryCastSpell(triangleSpell);
     }
 
-    private bool CanCastSpell()
-    {
-        return CanAct() && !IsOnGlobalCooldown;
-    }
 
+    #region Spells
     private void TriggerGlobalCooldown()
     {
         globalCooldownTimer = globalCooldown;
     }
 
-    private void TryUseSpell(AbilityInstance spell)
+    public void TryCastSpell(AbilityInstance spell)
     {
         if (spell.GetCooldownRemaining() > 0) return;
+        if (!HasResource(spell)) return;
+        
+
         
         bool isResurrect = spell.ability is ResAbility;
         CombatEntity target = currentTarget;
@@ -273,7 +260,9 @@ public class PlayerCombatEntity : CombatEntity
 
         Debug.Log($"Using {spell.ability.abilityName} on {target.name}");
         lastPosition = transform.position; // set position so it can cancel from walking
+        castingParticles.Play();
         StartCoroutine(CastSpell(target, spell));
+        
     }
 
     private IEnumerator CastSpell(CombatEntity target, AbilityInstance spell)
@@ -294,6 +283,7 @@ public class PlayerCombatEntity : CombatEntity
             if (target == null || (target.IsDead && !isResurrect))
             {
                 Debug.Log("Target lost!");
+                
                 InterruptCast();
                 yield break;
             }
@@ -302,13 +292,65 @@ public class PlayerCombatEntity : CombatEntity
         }
         
         CompleteCast();
+        castingParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         spell.ability.ExecuteAbility(this, target);
+        ConsumeResource(spell.ability.resourceCost);
+        Instantiate(attackParticles, target.transform.position + Vector3.up *0.5f, transform.rotation);
+        
         playerAnim.SetTrigger(spell.ability.animation.ToString());
         spell.StartCooldown();
     }
+    private bool CanCastSpell() => CanAct() && !IsOnGlobalCooldown;
+    private void HandleCooldowns()
+    {
+        if (globalCooldownTimer > 0)
+            globalCooldownTimer -= Time.deltaTime;
 
+        foreach (var spell in spells)
+        {
+            if(!spell.IsReady())
+                spell.UpdateCooldown(Time.deltaTime);
+        }
 
+    }
+    #endregion
 
+    #region Resource
+
+   
+    bool HasResource(AbilityInstance spell)
+    {
+        return currentResource >= spell.ability.resourceCost;
+    }
+
+    void ConsumeResource(float amount)
+    {
+        currentResource = Mathf.Max(0, currentResource - amount);
+        OnResourceChanged?.Invoke(currentResource);
+    }
+
+    public void RestoreResource(float amount)
+    {
+        currentResource = Mathf.Min(currentResource + amount, maxResoruce);
+        OnResourceChanged?.Invoke(currentResource);
+    }
+
+    void UpdateResourceRegen()
+    {
+        if (currentResource < maxResoruce)
+        {
+            RestoreResource(regenPerSecond * Time.deltaTime);
+        }
+        
+    }
+
+    void RestoreResourceOnHit()
+    {
+        RestoreResource(regenPerSecond);
+    }
+    #endregion
+    
+    #region Animations
 
     void HandleAnimations()
     {
@@ -319,17 +361,27 @@ public class PlayerCombatEntity : CombatEntity
     {
         playerAnim.SetTrigger("Hit");
     }
+    
     private void CheckMovementInterrupt()
     {
+        // Allow movement in last 5% of cast (feels more responsive)
         if (!isCasting || CastProgress > 0.95f) return;
         
         float distanceMoved = Vector3.Distance(transform.position, lastPosition);
         if (distanceMoved > movementThreshold)
         {
             Debug.Log("Cast Interrupted by movement!");
+            castingParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
             StopAllCoroutines();
             InterruptCast();
         }
+    }
+    #endregion
+    #region Death
+    public void Resurrect(float healingAmount)
+    {
+        isDead = false;
+        Heal(healingAmount);
     }
 
     protected override void Die()
@@ -338,27 +390,57 @@ public class PlayerCombatEntity : CombatEntity
         playerAnim.Play("Death_A");
         base.Die();
     }
+    
+    
 
+    #endregion
+    #region Targeting
+    
     public BossCombatEntity FindNearestEnemy()
     {
         // Simple version - finds any BossCombatEntity
-        BossCombatEntity boss = FindObjectOfType<BossCombatEntity>();
-        return boss;
+        return cachedBoss;
+    }
+    private void LookAtTarget()
+    {
+        if (currentTarget == null || currentTarget == this)
+        {
+            // 1. Get the camera's forward and right vectors
+            Vector3 camForward = Camera.main.transform.forward;
+            Vector3 camRight = Camera.main.transform.right;
+
+            // 2. Flatten them so we don't look "up" into the sky or "down" into the floor
+            camForward.y = 0;
+            camRight.y = 0;
+            camForward.Normalize();
+            camRight.Normalize();
+
+            // 3. Create a movement direction relative to the camera
+            Vector3 relativeMovement = (camForward * movement.z) + (camRight * movement.x);
+
+            if (relativeMovement.sqrMagnitude > 0.01f)
+            {
+                Quaternion newRotation = Quaternion.LookRotation(relativeMovement);
+                transform.rotation = Quaternion.Slerp(transform.rotation, newRotation, Time.deltaTime * 10f);
+            }
+
+            return;
+        }
+        
+        if (currentTarget != null) 
+        {
+            Vector3 targetPosition = currentTarget.transform.position;
+            targetPosition.y = transform.position.y;
+            transform.LookAt(targetPosition);
+            return;
+        }
+        
     }
     
     public void SetTarget(CombatEntity target) => currentTarget = target;
+    #endregion
 
-    [ContextMenu("Test Damage")]
-    public void TestDamage()
-    {
-        TakeDamage(500);
-    }
 
-    public void Resurrect(float healingAmount)
-    {
-        isDead = false;
-        Heal(healingAmount);
-    }
 }
 
 

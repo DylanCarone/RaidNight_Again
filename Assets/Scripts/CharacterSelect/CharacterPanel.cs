@@ -127,6 +127,7 @@ public class CharacterPanel : MonoBehaviour
         playerSelected = true;
         // send this info to the lobby manager
         // play the select animation
+        spawnedPlayer.GetComponent<Animator>().SetBool("IsCasting", playerSelected);
         // disallow other players from selected the same character
         OnCharacterSelected?.Invoke(selectedCharacter);
         
@@ -135,6 +136,7 @@ public class CharacterPanel : MonoBehaviour
     public void DeselectCharacter(CharacterData selectedCharacter)
     {
         playerSelected = false;
+        spawnedPlayer.GetComponent<Animator>().SetBool("IsCasting", playerSelected);
         OnCharacterDeselected?.Invoke(selectedCharacter);
     }
 

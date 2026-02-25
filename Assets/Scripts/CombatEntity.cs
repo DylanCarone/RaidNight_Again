@@ -8,8 +8,8 @@ public abstract class CombatEntity : MonoBehaviour
     public EntityType CurrentType => type;
     
     [Header("Health")]
-    [SerializeField] private float maxHealth = 1000f;
-    private float currentHealth;
+    [SerializeField] protected float maxHealth = 1000f;
+    protected float currentHealth;
     protected bool isDead = false;
     
     public float CurrentHealth => currentHealth;
@@ -18,8 +18,8 @@ public abstract class CombatEntity : MonoBehaviour
 
 
 
-    [Header("Combat")] [SerializeField] private float attackSpeed = .4f;
-    [SerializeField] private float attackDamage = 100f;
+    [Header("Combat")] [SerializeField] protected float attackSpeed = 2.5f;
+    [SerializeField] protected float attackDamage = 100f;
     [SerializeField] protected float attackRange = 3f;
     
     protected CombatEntity currentTarget;
@@ -38,12 +38,14 @@ public abstract class CombatEntity : MonoBehaviour
     
     // Events for UI and other updates later
     public event Action<float, float> OnHealthChanged; // current, max
+    public event Action OnTakeDamage;
     public event Action OnDeath;
     public event Action OnAutoAttack; // send signal after auto attacking
 
     public event Action<string, float> OnCastStart; // abilityName, castTime
     public event Action<string> OnCastComplete; // abilityName
     public event Action<string> OnCastInterrupted; // abilityName
+    
     
 
     protected void Awake()
@@ -88,11 +90,11 @@ public abstract class CombatEntity : MonoBehaviour
         {
             // perform auto attack
             PerformAutoAttack();
-            autoAttackTimer = 1f / attacksPerSecond; // reset timer
+            autoAttackTimer = attackSpeed; // reset timer
         }
     }
 
-    private void PerformAutoAttack()
+    protected virtual void PerformAutoAttack()
     {
         //Debug.Log($"{name} attacks {currentTarget.name} for {attackDamage} damage!");
         if (currentTarget.CurrentType == type) return; // dont attack if is friendly
@@ -135,10 +137,10 @@ public abstract class CombatEntity : MonoBehaviour
         currentHealth = Mathf.Max(0, currentHealth - damage);
         
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
+        OnTakeDamage?.Invoke();
 
         if (currentHealth <= 0)
             Die();
-        
     }
 
     public void Heal(float amount)
@@ -193,7 +195,7 @@ public abstract class CombatEntity : MonoBehaviour
 
     #endregion
 
-    protected bool CanAct()
+    public bool CanAct()
     {
         return !isDead && !isCasting;
     }
