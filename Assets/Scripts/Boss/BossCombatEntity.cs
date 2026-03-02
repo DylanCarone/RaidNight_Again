@@ -29,6 +29,7 @@ public abstract class BossCombatEntity : CombatEntity
     private bool isInitialized = false;
 
     private string currentCastName;
+    private GameObject currentTelegraph;
     public void Initialize()
     {
         currentTarget = FindNearestPlayer();
@@ -54,6 +55,8 @@ public abstract class BossCombatEntity : CombatEntity
         {
             StopAllCoroutines();
             bossAnim.SetTrigger("Win");
+            StatusEffectManager.RemoveAllEffects();
+            agent.isStopped = true;
             return;
         }
         
@@ -67,12 +70,7 @@ public abstract class BossCombatEntity : CombatEntity
             transform.LookAt(targetPosition);
         }
 
-        if (currentTarget == null)
-        {
-            StopAllCoroutines();
-            agent.isStopped = true;
-            return;
-        }
+        
         
         // Look for players to attack
         if (!isInCombat)
@@ -161,12 +159,22 @@ public abstract class BossCombatEntity : CombatEntity
         if (telegraph != null)
         {
             telegraph.SetActive(true);
-
-            if (ability.attackType == AttackType.AreaAOE)
+            Transform aoeVisual = telegraph.transform;
+            currentTelegraph = telegraph;
+            switch (ability.attackType)
             {
-                Transform aoeVisual = telegraph.transform;
-                aoeVisual.localScale = new Vector3(ability.range * 2, 0.2f, ability.range * 2);
+                case AttackType.AreaAOE:
+                    aoeVisual.localScale = new Vector3(ability.range * 2, 0.2f, ability.range * 2);
+                    yield break;
+                case AttackType.LineAOE:
+                    Vector3 center = transform.position + transform.forward * (ability.range / 2f);
+                    Vector3 halfExtents = new Vector3(ability.range / 2f, 0.25f, ability.range / 2f);
+                    aoeVisual.transform.position = new Vector3(center.x, aoeVisual.transform.position.y, center.z);
+                    aoeVisual.transform.rotation = transform.rotation;
+                    aoeVisual.localScale = new Vector3(aoeVisual.localScale.x, aoeVisual.localScale.y, ability.range);
+                    break;
             }
+
         }
 
         
@@ -188,6 +196,16 @@ public abstract class BossCombatEntity : CombatEntity
         
         agent.isStopped = false;
         currentCastName = "";
+        if (ability.particleEffect != null)
+        {
+            var targetTransform = transform.position;
+            if (telegraph == null)
+            {
+                targetTransform = currentTarget.transform.position;
+            }
+           var particles = Instantiate(ability.particleEffect, targetTransform, transform.rotation);
+           Destroy(particles, 4f);
+        }
     }
 
     private void UseSingleTarget(BossAbility ability)
@@ -217,7 +235,7 @@ public abstract class BossCombatEntity : CombatEntity
     {
         bossAnim?.SetTrigger(ability.animation.ToString());
         Vector3 center = transform.position + transform.forward * (ability.range / 2f);
-        Vector3 halfExtents = new Vector3(ability.range / 2f, 0.25f, ability.range / 2f);
+        Vector3 halfExtents = new Vector3(2, 0.5f, ability.range / 2f);
         
         Collider[] hitColliders = Physics.OverlapBox(center, halfExtents, transform.rotation);
 
@@ -239,6 +257,7 @@ public abstract class BossCombatEntity : CombatEntity
                 player.TakeDamage(ability.damage);
         }
     }
+    
     private void UseBigAOEAttack(BossAbility ability)
     {
         if (ability is BossAbilityTelegraph t && t.telegraphVisual != null)
@@ -353,7 +372,15 @@ public abstract class BossCombatEntity : CombatEntity
             InterruptCast();
             StopCoroutine(rotationCoroutine);
         }
+
+        if (currentCastRoutine != null)
+        {
+            InterruptCast();
+            StopCoroutine(currentCastRoutine);
+        }
+        
         agent.SetDestination(transform.position);
+        currentTelegraph.SetActive(false);
 
         bossUI.SetActive(false);
         base.Die();

@@ -1,9 +1,11 @@
 using System;
+using UnityEngine;
 
 [Serializable]
 public class BossAbility
 {
     public string abilityName;
+    public GameObject particleEffect;
     public AttackType attackType;
     public float castTime;
     public float damage;

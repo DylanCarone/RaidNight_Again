@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public abstract class CombatEntity : MonoBehaviour
@@ -9,6 +11,9 @@ public abstract class CombatEntity : MonoBehaviour
     
     [Header("Health")]
     [SerializeField] protected float maxHealth = 1000f;
+
+    [SerializeField] [Range(0,1)] private float maxDamageReduction = 1f;
+    private float currentDamageReduction;
     protected float currentHealth;
     protected bool isDead = false;
     
@@ -21,6 +26,8 @@ public abstract class CombatEntity : MonoBehaviour
     [Header("Combat")] [SerializeField] protected float attackSpeed = 2.5f;
     [SerializeField] protected float attackDamage = 100f;
     [SerializeField] protected float attackRange = 3f;
+    private StatusEffectManager statusEffectManager;
+    public StatusEffectManager StatusEffectManager => statusEffectManager;
     
     protected CombatEntity currentTarget;
     private float autoAttackTimer = 0f;
@@ -52,6 +59,9 @@ public abstract class CombatEntity : MonoBehaviour
     {
         currentHealth = maxHealth;
         attacksPerSecond = 1 / attackSpeed;
+        currentDamageReduction = maxDamageReduction;
+        statusEffectManager = gameObject.AddComponent<StatusEffectManager>();
+        
     }
 
     protected void Update()
@@ -130,11 +140,21 @@ public abstract class CombatEntity : MonoBehaviour
 
     #region Health Changes
     
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, CombatEntity source = null)
     {
         if (isDead) return;
+        if(damage <= 0) return;
 
-        currentHealth = Mathf.Max(0, currentHealth - damage);
+        List<BuffEffect> shields = statusEffectManager.GetEffectsOfType<BuffEffect>()
+            .Where(b => b.BuffType == BuffType.Shield).ToList();
+
+        foreach (BuffEffect shield in shields)
+        {
+            damage = shield.AbsorbDamage(damage);
+            if(damage <= 0) return;
+        }
+
+        currentHealth = Mathf.Max(0, currentHealth - (damage * currentDamageReduction));
         
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
         OnTakeDamage?.Invoke();
@@ -142,6 +162,24 @@ public abstract class CombatEntity : MonoBehaviour
         if (currentHealth <= 0)
             Die();
     }
+
+    public bool HasShield()
+    {
+        List<BuffEffect> shields = statusEffectManager.GetEffectsOfType<BuffEffect>()
+            .Where(b => b.BuffType == BuffType.Shield).ToList();
+
+        foreach (BuffEffect shield in shields)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void SetDamageReduction(float reduction) => currentDamageReduction = Mathf.Clamp(reduction, 0f, 1f);
+    
+
+    public void ResetDamageReduction() => currentDamageReduction = maxDamageReduction;
 
     public void Heal(float amount)
     {
@@ -156,6 +194,7 @@ public abstract class CombatEntity : MonoBehaviour
         if (isDead) return;
 
         isDead = true;
+        statusEffectManager?.RemoveAllEffects();
         OnDeath?.Invoke();
     }
 
@@ -183,6 +222,7 @@ public abstract class CombatEntity : MonoBehaviour
     {
         isCasting = false;
         OnCastComplete?.Invoke(currentCastName);
+        
 
         autoAttackTimer = 1f / attacksPerSecond;
     }

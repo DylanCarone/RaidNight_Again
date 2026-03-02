@@ -48,5 +48,5 @@ public enum AbilityTargetType
 {
     Self,
     Ally,
-    Boss
+    Enemy
 }

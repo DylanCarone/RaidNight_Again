@@ -17,8 +17,9 @@ MonoBehaviour:
   description: Deals Moderate damage
   animation: 1
   resourceType: 1
-  resourceCost: 15
-  damage: 500
+  resourceCost: 0
+  targetType: 2
+  damage: 10
   healing: 0
   castTime: 0
   cooldown: 8

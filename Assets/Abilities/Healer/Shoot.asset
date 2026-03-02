@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbe3b2f43df52fd45863c06b4ef3bc90, type: 3}
   m_Name: Shoot
   m_EditorClassIdentifier: Assembly-CSharp::Ability
-  abilityName: New ability
+  abilityName: Hot
   icon: {fileID: 21300000, guid: c7c8f028651239a4fabe73ab29946eaf, type: 3}
   description: Ability description
   animation: 0

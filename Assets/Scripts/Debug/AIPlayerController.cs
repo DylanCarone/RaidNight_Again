@@ -65,8 +65,8 @@ public class AIPlayerController : MonoBehaviour
     {
         if (!player.CanAct()) return;
         
-        
-        UseRandomDamageAbility(boss);
+        if(player.CanCastSpell())
+            UseRandomDamageAbility(boss);
     }
     
     private void UseRandomDamageAbility(BossCombatEntity boss)

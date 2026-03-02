@@ -14,18 +14,13 @@ public class GolemBoss : BossCombatEntity
 
     protected override IEnumerator BossRotation()
     {
-        yield return new WaitForSeconds(.5f);
-        yield return UseAttack(raidWide);
+        yield return new WaitForSeconds(2f);
         while (!IsDead)
         {
-            yield return new WaitForSeconds(4f);
             yield return UseAttack(slam);
-            yield return new WaitForSeconds(4f);
-            yield return UseAttack(blastoff);
             yield return new WaitForSeconds(4f);
             yield return UseAttack(shockWave);
             yield return new WaitForSeconds(4f);
-            yield return UseAttack(overdrive);
             
         }
     }

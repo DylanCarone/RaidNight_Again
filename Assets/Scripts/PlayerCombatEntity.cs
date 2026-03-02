@@ -106,7 +106,7 @@ public class PlayerCombatEntity : CombatEntity
         controller = GetComponent<CharacterController>();
         //playerInput = GetComponent<PlayerInput>();
         //Debug.Log(playerInput.playerIndex);
-        
+        if(castingParticles) castingParticles.Stop();
         base.Awake();
     }
 
@@ -205,9 +205,8 @@ public class PlayerCombatEntity : CombatEntity
         
         if(playerInput.actions.FindAction("Ability 2").WasPressedThisFrame() && CanCastSpell())
             TryCastSpell(xSpell);
-            
         
-        if(playerInput.actions.FindAction("Ability 3").WasPressedThisFrame() && CanAct())
+        if(playerInput.actions.FindAction("Ability 3").WasPressedThisFrame() && CanCastSpell())
             TryCastSpell(circleSpell);
         
         if (playerInput.actions.FindAction("Ability 4").WasPressedThisFrame() && CanCastSpell())
@@ -236,10 +235,15 @@ public class PlayerCombatEntity : CombatEntity
             if (target == null ||!target.IsDead) return;
             target = currentTarget;
         }
+        else if (spell.ability.targetType == AbilityTargetType.Self)
+        {
+            target = this;
+        }
         else if (spell.ability.damage > 0 && currentTarget.CurrentType == EntityType.Boss)  // damage targets boss
             target = FindNearestEnemy();
         else if (spell.ability.healing > 0 && currentTarget.CurrentType == EntityType.Player) // heals are self for now
             target = currentTarget;
+        
         
         if ((target == null || (target.IsDead && !isResurrect))) // no valid target
             return;
@@ -258,7 +262,6 @@ public class PlayerCombatEntity : CombatEntity
             return;
         
 
-        Debug.Log($"Using {spell.ability.abilityName} on {target.name}");
         lastPosition = transform.position; // set position so it can cancel from walking
         castingParticles.Play();
         StartCoroutine(CastSpell(target, spell));
@@ -295,12 +298,13 @@ public class PlayerCombatEntity : CombatEntity
         castingParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         spell.ability.ExecuteAbility(this, target);
         ConsumeResource(spell.ability.resourceCost);
-        Instantiate(attackParticles, target.transform.position + Vector3.up *0.5f, transform.rotation);
+        var attackVfx = Instantiate(attackParticles, target.transform.position + Vector3.up *0.5f, transform.rotation);
+        Destroy(attackVfx, 2f);
         
         playerAnim.SetTrigger(spell.ability.animation.ToString());
         spell.StartCooldown();
     }
-    private bool CanCastSpell() => CanAct() && !IsOnGlobalCooldown;
+    public bool CanCastSpell() => CanAct() && !IsOnGlobalCooldown;
     private void HandleCooldowns()
     {
         if (globalCooldownTimer > 0)
