@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: BurnWave
+  m_EditorClassIdentifier: Assembly-CSharp::DoTWithStackBonusAbility
+  abilityName: Burnwave
+  icon: {fileID: 1023881543254830229, guid: 215687feeab0b7445b4a1cd86c82c2e1, type: 3}
+  description: Ability description
+  animation: 0
+  resourceType: 0
+  resourceCost: 0
+  targetType: 0
+  damage: 0
+  healing: 0
+  castTime: 0
+  cooldown: 0
+  range: 0
+  isOnGDC: 1
+  damagePerTick: 20
+  dotDuration: 10
+  dotTickRate: 1
+  visualEffectPrefab: {fileID: 0}
+  stackBonusEffectName: BurnBonus
+  bonusStackChance: 0.5
+  bonusStackCount: 1

@@ -13,14 +13,16 @@ public class StatusEffectManager : MonoBehaviour
     public event Action<StatusEffect> OnEffectRemoved;
 
 
-    StatusEffect GetEffect(string effectName)
+    public StatusEffect GetEffectByName(string effectName)
     {
         return activeEffects.FirstOrDefault(e => e.EffectName == effectName);
     }
+    
+
 
     public void ApplyDoT(CombatEntity caster, CombatEntity target, DoTAbility ability)
     {
-        StatusEffect existingEffect = GetEffect(ability.abilityName);
+        StatusEffect existingEffect = GetEffectByName(ability.abilityName);
         
         if (existingEffect != null)
         {
@@ -41,7 +43,7 @@ public class StatusEffectManager : MonoBehaviour
 
     public void ApplyHoT(CombatEntity caster, CombatEntity target, HotAbility ability)
     {
-        StatusEffect existingEffect = GetEffect(ability.abilityName);
+        StatusEffect existingEffect = GetEffectByName(ability.abilityName);
 
         if (existingEffect != null)
         {
@@ -61,7 +63,7 @@ public class StatusEffectManager : MonoBehaviour
 
     public void ApplyBuff(CombatEntity caster, CombatEntity target, BuffAbility ability)
     {
-        StatusEffect existingEffect = GetEffect(ability.abilityName);
+        StatusEffect existingEffect = GetEffectByName(ability.abilityName);
         if (existingEffect != null)
         {
             existingEffect.Refresh();
@@ -78,7 +80,7 @@ public class StatusEffectManager : MonoBehaviour
 
     public bool HasEffect(string effectName)
     {
-        return GetEffect(effectName) != null;
+        return GetEffectByName(effectName) != null;
     }
 
     public void RemoveEffect(StatusEffect effect)

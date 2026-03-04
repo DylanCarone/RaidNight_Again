@@ -1,108 +1,152 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UI_CooldownManager : MonoBehaviour
 {
-    [Header("Settings")] 
-    [SerializeField] private PlayerCombatEntity player;
-    [Header("Spell Icons")]
-    [SerializeField] private Image squareIcon;
-    [SerializeField] private Image triangleIcon;
-    [SerializeField] private Image circleIcon;
-    [SerializeField] private Image xIcon;
-    
-    
-    [Header("Cooldown Images")]
-    [SerializeField] private Image squareCooldown;
-    [SerializeField] private Image triangleCooldown;
-    [SerializeField] private Image circleCooldown;
-    [SerializeField] private Image xCooldown;
+    [Header("Settings")] [SerializeField] private PlayerCombatEntity player;
 
-    [Header("Global Cooldown Images")]
-    [SerializeField] private Image[] globalCooldownImages;
-    
-    [Header("Out of Range Images")]
-    [SerializeField] private Image squareOutOfRangeImage;
-    [SerializeField] private Image triOutOfRangeImage;
-    [SerializeField] private Image circleOutOfRangeImage;
-    [SerializeField] private Image xOutOfRangeImage;
+    [Header("Spells")] [SerializeField] private SpellUI squareSpell;
+    [SerializeField] private SpellUI triangleSpell;
+    [SerializeField] private SpellUI circleSpell;
+    [SerializeField] private SpellUI xSpell;
 
-    [Header("Empowerment Indicators")]
-    [SerializeField] private Image squareEmpowermentIndicator;
-    [SerializeField] private Image triangleEmpowermentIndicator;
-    [SerializeField] private Image circleEmpowermentIndicator;
-    [SerializeField] private Image xEmpowermentIndicator;
+    private SpellUI[] spells;
+    private AbilityInstance[] spellInstances;
 
     private bool isInitialized = false;
 
     public void Initialize(PlayerCombatEntity player)
     {
         this.player = player;
-        squareIcon.sprite = player.SquareSpell.ability.icon;
-        triangleIcon.sprite = player.TriangleSpell.ability.icon;
-        circleIcon.sprite = player.CircleSpell.ability.icon;
-        xIcon.sprite = player.XSpell.ability.icon;
-        DisableGCDs();
-        player.SquareSpell.OnEmpowermentsChanged += (e) => UpdateEmpowermentUI(squareEmpowermentIndicator, e);
-        player.TriangleSpell.OnEmpowermentsChanged += (e) => UpdateEmpowermentUI(triangleEmpowermentIndicator, e);
-        player.CircleSpell.OnEmpowermentsChanged += (e) => UpdateEmpowermentUI(circleEmpowermentIndicator, e);
-        player.XSpell.OnEmpowermentsChanged += (e) => UpdateEmpowermentUI(xEmpowermentIndicator, e);
+
+        spells = new[] { squareSpell, triangleSpell, circleSpell, xSpell };
+        spellInstances = new[] { player.SquareSpell, player.TriangleSpell, player.CircleSpell, player.XSpell };
+        for (int i = 0; i < spells.Length; i++)
+        {
+            spells[i].Initialize(spellInstances[i], spellInstances);
+        }
+
+        player.SquareSpell.OnEmpowermentsChanged += (e) => squareSpell.UpdateEmpowermentUI(e);
+        player.TriangleSpell.OnEmpowermentsChanged += (e) => triangleSpell.UpdateEmpowermentUI(e);
+        player.CircleSpell.OnEmpowermentsChanged += (e) => circleSpell.UpdateEmpowermentUI(e);
+        player.XSpell.OnEmpowermentsChanged += (e) => xSpell.UpdateEmpowermentUI(e);
         isInitialized = true;
-        
-        
+
     }
 
-    private void UpdateEmpowermentUI(Image glow, List<AbilityEmpowerment> empowerments)
-    {
-        bool hasEmpowerments = empowerments.Count > 0;
-        glow.gameObject.SetActive(hasEmpowerments);
-    }
 
-    void DisableGCDs()
-    {
-        if(!player.SquareSpell.ability.isOnGDC)
-            globalCooldownImages[0].enabled = false;
-        if(!player.TriangleSpell.ability.isOnGDC)
-            globalCooldownImages[1].enabled = false;
-        if(!player.CircleSpell.ability.isOnGDC)
-            globalCooldownImages[2].enabled = false;
-        if(!player.XSpell.ability.isOnGDC)
-            globalCooldownImages[3].enabled = false;
-    }
-    
+
     // Update is called once per frame
     void Update()
     {
         if (!isInitialized) return;
-        
-        squareCooldown.fillAmount = player.SquareSpell.GetCooldownPercent();
-        triangleCooldown.fillAmount = player.TriangleSpell.GetCooldownPercent();
-        circleCooldown.fillAmount = player.CircleSpell.GetCooldownPercent();
-        xCooldown.fillAmount = player.XSpell.GetCooldownPercent();
 
-        foreach (var gcd in globalCooldownImages)
+        for (int i = 0; i < spells.Length; i++)
         {
-            gcd.fillAmount = player.GlobalCooldownTimer / player.GlobalCooldownDuration; 
+            spells[i].UpdateCooldown(spellInstances[i]);
+            spells[i].UpdateOutOfRange(player);
+            spells[i].UpdateOutOfMana(player);
         }
 
-        CalculateOutOfRange();
-        CalculateOutOfMana();
+        UpdateGlobalCooldown();
     }
 
-    private void CalculateOutOfRange()
+    private void UpdateGlobalCooldown()
     {
-        squareOutOfRangeImage.enabled = player.TargetRange > player.SquareSpell.ability.range;
-        triOutOfRangeImage.enabled = player.TargetRange > player.TriangleSpell.ability.range;
-        circleOutOfRangeImage.enabled = player.TargetRange > player.CircleSpell.ability.range;
-        xOutOfRangeImage.enabled = player.TargetRange > player.XSpell.ability.range;
-    }
-    private void CalculateOutOfMana()
-    {
-        squareOutOfRangeImage.enabled = player.CurrentResource < player.SquareSpell.ability.resourceCost;
-        triOutOfRangeImage.enabled = player.CurrentResource < player.TriangleSpell.ability.resourceCost;
-        circleOutOfRangeImage.enabled = player.CurrentResource < player.CircleSpell.ability.resourceCost;
-        xOutOfRangeImage.enabled = player.CurrentResource < player.XSpell.ability.resourceCost;
+        float gcdPercent = player.GlobalCooldownTimer / player.GlobalCooldownDuration;
+        foreach (var spell in spells)
+        {
+            if (spell.globalCooldownOverlay != null && spell.globalCooldownOverlay.enabled)
+                spell.globalCooldownOverlay.fillAmount = gcdPercent;
+
+
+
+        }
     }
 }
+
+
+[Serializable]
+    public class SpellUI
+    {
+        [Header("References")] public Image icon;
+
+        public Image cooldownOverlay;
+        public Image globalCooldownOverlay;
+        public Image outOfRangeOverlay;
+        public Image outOfManaOverlay;
+        public TextMeshProUGUI stackText;
+        public Image empowermentIndicator;
+
+        [HideInInspector] public int maxStacks;
+
+        private AbilityInstance currentSpell;
+
+        public void Initialize(AbilityInstance spell, AbilityInstance[] allSpells)
+        {
+            currentSpell = spell;
+            icon.sprite = spell.ability.icon;
+            maxStacks = 0;
+            foreach (var s in allSpells)
+            {
+                if (s.ability is ProcAbility proc && proc.abilityToBuff == spell.ability)
+                {
+                    maxStacks = proc.maxStacks;
+                    break;
+                }
+            }
+            
+            UpdateEmpowermentUI(new List<AbilityEmpowerment>());
+
+
+        }
+
+        public void UpdateCooldown(AbilityInstance spell)
+        {
+            cooldownOverlay.fillAmount = spell.GetCooldownPercent();
+        }
+
+        public void UpdateOutOfRange(PlayerCombatEntity player)
+        {
+            if (outOfRangeOverlay != null)
+                outOfRangeOverlay.enabled = player.TargetRange > currentSpell.ability.range;
+        }
+
+
+
+        public void UpdateOutOfMana(PlayerCombatEntity player)
+        {
+            if (outOfManaOverlay != null)
+                outOfManaOverlay.enabled = player.CurrentResource < currentSpell.ability.resourceCost;
+        }
+
+        public void UpdateEmpowermentUI(List<AbilityEmpowerment> empowerments)
+        {
+            Debug.Log($"{currentSpell} max stacks : {maxStacks}");
+            if (maxStacks <= 0)
+            {
+                empowermentIndicator.gameObject.SetActive(false);
+                if (stackText != null) stackText.gameObject.SetActive(false);
+                return;
+            }
+
+            int currentStacks = empowerments.Count > 0 ? Enumerable.Count(empowerments,e => e == empowerments[0]) : 0;
+
+            bool hasStacks = currentStacks > 0;
+            bool isMaxStacks = currentStacks >= maxStacks;
+
+            if (stackText != null)
+            {
+                stackText.gameObject.SetActive(hasStacks);
+                stackText.text = currentStacks.ToString();
+                stackText.color = isMaxStacks ? Color.red : Color.white;
+            }
+
+            empowermentIndicator.gameObject.SetActive(isMaxStacks);
+        }
+    }
+

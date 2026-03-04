@@ -41,12 +41,27 @@ public abstract class StatusEffect : MonoBehaviour
         remainingDuration = duration;
         OnRefresh();
     }
-    
-    protected abstract void OnApplied();
-    protected abstract void OnRefresh();
-    protected abstract void OnTick();
-    protected abstract void OnExpired();
-    protected abstract void OnRemoved();
+
+    protected virtual void OnApplied()
+    {
+    }
+
+    protected virtual void OnRefresh()
+    {
+    }
+
+    protected virtual void OnTick()
+    {
+    }
+
+    protected virtual void OnExpired()
+    {
+    }
+
+    protected virtual void OnRemoved()
+    {
+    }
+
     protected abstract float GetTickRate();
 
     private IEnumerator TickCoroutine()
