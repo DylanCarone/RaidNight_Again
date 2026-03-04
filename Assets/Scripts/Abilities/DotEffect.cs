@@ -8,14 +8,14 @@ public class DotEffect : StatusEffect
 
     public void Initialize(CombatEntity caster, CombatEntity target, string name, 
         float duration, float damagePerTick,
-        float tickRate, GameObject effectPrefab)
+        float tickRate, GameObject effectPrefab, Sprite icon)
     {
         this.damagePerTick = damagePerTick;
         this.tickRate = tickRate;
         this.visualEffectPrefab = effectPrefab;
         this.target = target;
         
-        base.Initialize(caster, target, name, duration);
+        base.Initialize(caster, target, name, duration, icon);
     }
 
     protected override void OnApplied()

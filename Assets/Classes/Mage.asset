@@ -20,12 +20,10 @@ MonoBehaviour:
   attackDamage: 200
   attackRange: 3
   abilities:
-  - {fileID: 11400000, guid: d71b15c0161aaf540ab527aa7f7a2df9, type: 2}
-  - {fileID: 11400000, guid: d71b15c0161aaf540ab527aa7f7a2df9, type: 2}
+  - {fileID: 11400000, guid: 6a2e71a0197fa524684cb45901b3c528, type: 2}
+  - {fileID: 11400000, guid: 79824676bf016d64684a5e06e99c87a3, type: 2}
+  - {fileID: 11400000, guid: f2f59b14ff9fac545b358b6166792e90, type: 2}
   - {fileID: 11400000, guid: b218517dd99049a4882f542d90ebe19f, type: 2}
-  - {fileID: 11400000, guid: f8ee75ce31db73a47a873fffd34113ac, type: 2}
-  - {fileID: 0}
-  - {fileID: 0}
   resourceType: 0
   maxResource: 100
   regenPerSecond: 3

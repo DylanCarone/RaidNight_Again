@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,12 +20,20 @@ public class UI_CooldownManager : MonoBehaviour
     [SerializeField] private Image circleCooldown;
     [SerializeField] private Image xCooldown;
 
+    [Header("Global Cooldown Images")]
     [SerializeField] private Image[] globalCooldownImages;
+    
+    [Header("Out of Range Images")]
     [SerializeField] private Image squareOutOfRangeImage;
     [SerializeField] private Image triOutOfRangeImage;
     [SerializeField] private Image circleOutOfRangeImage;
     [SerializeField] private Image xOutOfRangeImage;
 
+    [Header("Empowerment Indicators")]
+    [SerializeField] private Image squareEmpowermentIndicator;
+    [SerializeField] private Image triangleEmpowermentIndicator;
+    [SerializeField] private Image circleEmpowermentIndicator;
+    [SerializeField] private Image xEmpowermentIndicator;
 
     private bool isInitialized = false;
 
@@ -36,9 +45,20 @@ public class UI_CooldownManager : MonoBehaviour
         circleIcon.sprite = player.CircleSpell.ability.icon;
         xIcon.sprite = player.XSpell.ability.icon;
         DisableGCDs();
+        player.SquareSpell.OnEmpowermentsChanged += (e) => UpdateEmpowermentUI(squareEmpowermentIndicator, e);
+        player.TriangleSpell.OnEmpowermentsChanged += (e) => UpdateEmpowermentUI(triangleEmpowermentIndicator, e);
+        player.CircleSpell.OnEmpowermentsChanged += (e) => UpdateEmpowermentUI(circleEmpowermentIndicator, e);
+        player.XSpell.OnEmpowermentsChanged += (e) => UpdateEmpowermentUI(xEmpowermentIndicator, e);
         isInitialized = true;
+        
+        
     }
 
+    private void UpdateEmpowermentUI(Image glow, List<AbilityEmpowerment> empowerments)
+    {
+        bool hasEmpowerments = empowerments.Count > 0;
+        glow.gameObject.SetActive(hasEmpowerments);
+    }
 
     void DisableGCDs()
     {

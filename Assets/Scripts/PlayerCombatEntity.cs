@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Mono.Cecil;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -263,20 +264,24 @@ public class PlayerCombatEntity : CombatEntity
         
 
         lastPosition = transform.position; // set position so it can cancel from walking
-        castingParticles.Play();
+        castingParticles?.Play();
         StartCoroutine(CastSpell(target, spell));
         
     }
 
     private IEnumerator CastSpell(CombatEntity target, AbilityInstance spell)
     {
-        BeginCasting(spell.ability.abilityName, spell.ability.castTime);
+        
+        float castTime = spell.GetModifiedCastTime();
+        float resourceCost = spell.GetModifiedResourceCost();
+        
+        BeginCasting(spell.ability.abilityName, castTime);
         bool isResurrect = spell.ability is ResAbility;
         if(spell.ability.isOnGDC)
             TriggerGlobalCooldown();
         
 
-        while (currentCastProgress < spell.ability.castTime)
+        while (currentCastProgress < castTime)
         {
             currentCastProgress += Time.deltaTime;
             UpdateCastProgress(currentCastProgress);
@@ -294,10 +299,17 @@ public class PlayerCombatEntity : CombatEntity
             yield return null;
         }
         
-        CompleteCast();
-        castingParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        CompleteCast(); ;
+        castingParticles?.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         spell.ability.ExecuteAbility(this, target);
-        ConsumeResource(spell.ability.resourceCost);
+
+        foreach (var empowerment in spell.ActiveEmpowerments)
+        {
+            empowerment.OnSpellFired(this,target);
+        }
+        
+        ConsumeResource(resourceCost);
+        spell.ConsumeEmpowerments();
         var attackVfx = Instantiate(attackParticles, target.transform.position + Vector3.up *0.5f, transform.rotation);
         Destroy(attackVfx, 2f);
         
@@ -316,6 +328,12 @@ public class PlayerCombatEntity : CombatEntity
                 spell.UpdateCooldown(Time.deltaTime);
         }
 
+    }
+
+
+    public AbilityInstance GetSpellByAbility(Ability ability)
+    {
+        return spells.FirstOrDefault(s => s.ability == ability);
     }
     #endregion
 

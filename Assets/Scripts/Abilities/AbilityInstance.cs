@@ -1,6 +1,8 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
+[Serializable]
 public class AbilityInstance
 {
     public Ability ability;
@@ -8,6 +10,14 @@ public class AbilityInstance
 
     private bool canCast;
     public bool CanCast => canCast;
+
+    private bool isEmpowered = false;
+
+    private List<AbilityEmpowerment> activeEmpowerments = new List<AbilityEmpowerment>();
+    public IReadOnlyList<AbilityEmpowerment> ActiveEmpowerments => activeEmpowerments;
+    public bool IsEmpowered => activeEmpowerments.Count > 0;
+    
+    public event Action<List<AbilityEmpowerment>> OnEmpowermentsChanged;
 
     public AbilityInstance(Ability ability)
     {
@@ -48,5 +58,46 @@ public class AbilityInstance
     public void ResetCooldown()
     {
         currentCooldown = 0f;
+    }
+    
+    public void SetEmpowered(bool value) => isEmpowered = value;
+
+    public void ApplyEmpowerment(AbilityEmpowerment empowerment)
+    {
+        activeEmpowerments.Add(empowerment);
+        OnEmpowermentsChanged?.Invoke(activeEmpowerments);
+    }
+    
+    public void ConsumeEmpowerments()
+    {
+        activeEmpowerments.Clear();
+        OnEmpowermentsChanged?.Invoke(activeEmpowerments);
+    }
+
+    public float GetModifiedResourceCost()
+    {
+        float cost = ability.resourceCost;
+        foreach (var e in activeEmpowerments)
+        {
+            cost = e.ModifyResourceCost(cost);
+        }
+
+        return cost;
+    }
+    public float GetModifiedCastTime()
+    {
+        float castTime = ability.castTime;
+        foreach (var e in activeEmpowerments)
+            castTime = e.ModifyCastTime(castTime);
+        
+        return castTime;
+    }
+
+    public float GetModifiedDamage()
+    {
+        float damage = ability.damage;
+        foreach (var e in activeEmpowerments)
+            damage = e.ModifyDamage(damage);
+        return damage;
     }
 }

@@ -1,11 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class StatusEffectManager : MonoBehaviour
 {
     public  List<StatusEffect> activeEffects = new List<StatusEffect>();
     public List<StatusEffect> ActiveEffects => activeEffects;
+    
+    public event Action<StatusEffect> OnEffectApplied;
+    public event Action<StatusEffect> OnEffectRemoved;
 
 
     StatusEffect GetEffect(string effectName)
@@ -28,9 +33,10 @@ public class StatusEffectManager : MonoBehaviour
         effectObj.transform.SetParent(target.transform);
         
         DotEffect dot = effectObj.AddComponent<DotEffect>();
-        dot.Initialize(caster, target, ability.abilityName, ability.dotDuration, ability.damagePerTick, ability.dotTickRate, ability.visualEffectPrefab);
+        dot.Initialize(caster, target, ability.abilityName, ability.dotDuration, ability.damagePerTick, ability.dotTickRate, ability.visualEffectPrefab, ability.icon);
         
         activeEffects.Add(dot);
+        OnEffectApplied?.Invoke(dot);
     }
 
     public void ApplyHoT(CombatEntity caster, CombatEntity target, HotAbility ability)
@@ -78,6 +84,8 @@ public class StatusEffectManager : MonoBehaviour
     public void RemoveEffect(StatusEffect effect)
     {
         activeEffects.Remove(effect);
+        OnEffectRemoved?.Invoke(effect);
+        
     }
 
     public void RemoveAllEffects()

@@ -9,19 +9,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbe3b2f43df52fd45863c06b4ef3bc90, type: 3}
+  m_Script: {fileID: 11500000, guid: fac7d9f4ffec4fabb1fa9e84148873f4, type: 3}
   m_Name: Fireball
-  m_EditorClassIdentifier: Assembly-CSharp::Ability
+  m_EditorClassIdentifier: Assembly-CSharp::ProcAbility
   abilityName: Fireball
   icon: {fileID: 21300000, guid: 141ba591a6dddec44ac9c421089f8476, type: 3}
-  description: Shoots a fire ball at a distance
+  description: Ability description
   animation: 0
   resourceType: 0
-  resourceCost: 30
+  resourceCost: 8
   targetType: 2
-  damage: 800
+  damage: 150
   healing: 0
   castTime: 2
   cooldown: 0
   range: 25
   isOnGDC: 1
+  procChance: 0.2
+  abilityToBuff: {fileID: 11400000, guid: 79824676bf016d64684a5e06e99c87a3, type: 2}
+  empowerments:
+  - {fileID: 11400000, guid: 417db7b9f7f3a814f84ff5e991382f88, type: 2}
+  - {fileID: 11400000, guid: 5793f06981bb7c340a148db3e3310dec, type: 2}

@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: FireBlast
   m_EditorClassIdentifier: Assembly-CSharp::Ability
   abilityName: Fireball
-  icon: {fileID: 21300000, guid: 47799f431c0694542a254bf488f54c45, type: 3}
+  icon: {fileID: -2904807348406626498, guid: 215687feeab0b7445b4a1cd86c82c2e1, type: 3}
   description: Shoots a fire ball at a distance
   animation: 0
   resourceType: 0
   resourceCost: 15
+  targetType: 2
   damage: 800
   healing: 0
   castTime: 0

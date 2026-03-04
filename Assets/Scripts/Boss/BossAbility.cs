@@ -6,6 +6,7 @@ public class BossAbility
 {
     public string abilityName;
     public GameObject particleEffect;
+    public GameObject spawnPrefab;
     public AttackType attackType;
     public float castTime;
     public float damage;
@@ -26,5 +27,6 @@ public enum AttackType
     SingleTarget,
     RaidWide,
     LineAOE,
-    AreaAOE
+    AreaAOE,
+    RoleTargeted
 }

@@ -16,6 +16,9 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: e990f8c702e428d4498ff6d56d6d6195, type: 3}
   description: Ability description
   animation: 1
+  resourceType: 0
+  resourceCost: 0
+  targetType: 2
   damage: 1
   healing: 0
   castTime: 0

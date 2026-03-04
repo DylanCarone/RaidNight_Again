@@ -25,7 +25,7 @@ public class HealthBar : MonoBehaviour
         healthBar.maxValue = entity.MaxHealth;
         healthBar.value = entity.CurrentHealth;
         entity.OnHealthChanged += UpdateHealth;
-        barColor = healthBarImage.color;
+        //barColor = healthBarImage.color;
         
 
     }

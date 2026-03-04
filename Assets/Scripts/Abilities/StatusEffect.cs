@@ -9,6 +9,9 @@ public abstract class StatusEffect : MonoBehaviour
     protected float remainingDuration;
     protected CombatEntity caster;
     protected CombatEntity target;
+    protected Sprite icon;
+    public Sprite Icon => icon;
+    public float Duration => duration;
 
     [Header("Visual")] 
     protected GameObject visualEffectPrefab;
@@ -18,13 +21,14 @@ public abstract class StatusEffect : MonoBehaviour
     public float RemainingDuration => remainingDuration;
     public CombatEntity Caster => caster;
 
-    public virtual void Initialize(CombatEntity caster, CombatEntity target, string name, float duration)
+    public virtual void Initialize(CombatEntity caster, CombatEntity target, string name, float duration, Sprite icon = null)
     {
         this.caster = caster;
         this.target = target;
         this.effectName = name;
         this.duration = duration;
         this.remainingDuration = duration;
+        this.icon = icon;
         
         Debug.Log($"Applied {effectName} to {target.name} for {duration}s");
         

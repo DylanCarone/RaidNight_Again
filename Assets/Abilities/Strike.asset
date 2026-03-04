@@ -18,6 +18,7 @@ MonoBehaviour:
   animation: 0
   resourceType: 1
   resourceCost: 15
+  targetType: 2
   damage: 800
   healing: 0
   castTime: 0

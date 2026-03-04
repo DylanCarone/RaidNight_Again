@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dbe3b2f43df52fd45863c06b4ef3bc90, type: 3}
-  m_Name: Fireball
+  m_Name: Pyroblast
   m_EditorClassIdentifier: Assembly-CSharp::Ability
-  abilityName: Fireball
-  icon: {fileID: 21300000, guid: 141ba591a6dddec44ac9c421089f8476, type: 3}
-  description: Shoots a fire ball at a distance
+  abilityName: Pyroblast
+  icon: {fileID: 6107784321054212483, guid: 215687feeab0b7445b4a1cd86c82c2e1, type: 3}
+  description: Ability description
   animation: 0
   resourceType: 0
-  resourceCost: 30
+  resourceCost: 60
   targetType: 2
-  damage: 800
+  damage: 1000
   healing: 0
-  castTime: 2
+  castTime: 6
   cooldown: 0
   range: 25
   isOnGDC: 1

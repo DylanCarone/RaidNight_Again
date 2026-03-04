@@ -17,15 +17,13 @@ MonoBehaviour:
   className: Knight
   maxHealth: 1400
   attackSpeed: 1.4
-  attackDamage: 150
+  attackDamage: 0
   attackRange: 4
   abilities:
-  - {fileID: 11400000, guid: f2f59b14ff9fac545b358b6166792e90, type: 2}
-  - {fileID: 11400000, guid: e3ff71914b469f0429e29f654e50c011, type: 2}
-  - {fileID: 11400000, guid: 49d7ccef23dfd9444bdf18c65621834a, type: 2}
-  - {fileID: 11400000, guid: 98d1c98fcf814d645939337077fb0cdb, type: 2}
-  - {fileID: 11400000, guid: 49d7ccef23dfd9444bdf18c65621834a, type: 2}
-  - {fileID: 11400000, guid: d71b15c0161aaf540ab527aa7f7a2df9, type: 2}
+  - {fileID: 11400000, guid: d427e39ad8d5bf94b92b27c1e11bc8bd, type: 2}
+  - {fileID: 11400000, guid: d427e39ad8d5bf94b92b27c1e11bc8bd, type: 2}
+  - {fileID: 11400000, guid: d427e39ad8d5bf94b92b27c1e11bc8bd, type: 2}
+  - {fileID: 11400000, guid: d427e39ad8d5bf94b92b27c1e11bc8bd, type: 2}
   resourceType: 1
   maxResource: 100
   regenPerSecond: 5

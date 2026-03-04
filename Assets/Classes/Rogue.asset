@@ -17,15 +17,13 @@ MonoBehaviour:
   className: Rogue
   maxHealth: 1000
   attackSpeed: 0.8
-  attackDamage: 100
+  attackDamage: 0
   attackRange: 4
   abilities:
-  - {fileID: 11400000, guid: 3c7cca48ca169ca4290ce6ba616e97de, type: 2}
-  - {fileID: 11400000, guid: 3c7cca48ca169ca4290ce6ba616e97de, type: 2}
-  - {fileID: 11400000, guid: 3c7cca48ca169ca4290ce6ba616e97de, type: 2}
-  - {fileID: 11400000, guid: 3c7cca48ca169ca4290ce6ba616e97de, type: 2}
-  - {fileID: 11400000, guid: fa4d5cd022399b54c821ff05bd545b6d, type: 2}
-  - {fileID: 11400000, guid: 49d7ccef23dfd9444bdf18c65621834a, type: 2}
+  - {fileID: 11400000, guid: d427e39ad8d5bf94b92b27c1e11bc8bd, type: 2}
+  - {fileID: 11400000, guid: d427e39ad8d5bf94b92b27c1e11bc8bd, type: 2}
+  - {fileID: 11400000, guid: d427e39ad8d5bf94b92b27c1e11bc8bd, type: 2}
+  - {fileID: 11400000, guid: d427e39ad8d5bf94b92b27c1e11bc8bd, type: 2}
   resourceType: 2
   maxResource: 100
   regenPerSecond: 10

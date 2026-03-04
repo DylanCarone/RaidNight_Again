@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Buff Ability", menuName = "Combat/Special Abilities/BuffAbility")]
+[CreateAssetMenu(fileName = "New Buff Ability", menuName = "Combat/Special Abilities/Buff Ability")]
 public class BuffAbility : Ability
 {
     [Header("Buff")]

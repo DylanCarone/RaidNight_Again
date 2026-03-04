@@ -140,6 +140,9 @@ public abstract class BossCombatEntity : CombatEntity
                 case AttackType.AreaAOE:
                     UseBigAOEAttack(ability);
                     break;
+                case AttackType.RoleTargeted:
+                    UseRoleTargeted(ability);
+                    break;
             }
 
         }
@@ -291,6 +294,8 @@ public abstract class BossCombatEntity : CombatEntity
         }
 
     }
+    
+    protected virtual void UseRoleTargeted(BossAbility ability){}
     
     
 
