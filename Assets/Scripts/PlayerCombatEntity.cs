@@ -32,8 +32,9 @@ public class PlayerCombatEntity : CombatEntity
     [SerializeField] private float globalCooldown = 2f;
 
     private float globalCooldownTimer = 0f;
+    private float effectiveGlobalCooldown;
     public float GlobalCooldownTimer => globalCooldownTimer;
-    public float GlobalCooldownDuration => globalCooldown;
+    public float GlobalCooldownDuration => effectiveGlobalCooldown;
     private bool IsOnGlobalCooldown => globalCooldownTimer > 0f;
     
     // resource
@@ -43,7 +44,7 @@ public class PlayerCombatEntity : CombatEntity
     public float MaxResoruce => maxResoruce;
     private float currentResource;
     public float CurrentResource => currentResource;
-    public Action<float> OnResourceChanged;
+    public Action<float,float> OnResourceChanged;
     private float regenPerSecond;
    
     // Spells
@@ -69,6 +70,8 @@ public class PlayerCombatEntity : CombatEntity
     [SerializeField] ParticleSystem castingParticles;
     [SerializeField] private GameObject attackParticles;
 
+    private bool thresholdMet = false;
+
     #region Initialization
 
     /// <summary>
@@ -89,13 +92,15 @@ public class PlayerCombatEntity : CombatEntity
         attackDamage = characterData.attackDamage;
         attackRange = characterData.attackRange;
         resourceType =  characterData.resourceType;
-        maxResoruce = characterData.maxResource;
-        regenPerSecond = characterData.regenPerSecond;
+        maxResoruce = characterData.resourceType.maxResource;
+        regenPerSecond = characterData.resourceType.regenPerSecond;;
         
-        if(characterData.startFull)
+        if(characterData.resourceType.StartFull)
             currentResource = maxResoruce;
-        if (characterData.restoreResourceOnHit)
+        if (characterData.resourceType.RestoreResourceOnHit)
             OnTakeDamage += RestoreResourceOnHit;
+
+        OnResourceChanged += SetThreshhold;
         
         isInitialized = true;
         
@@ -115,6 +120,7 @@ public class PlayerCombatEntity : CombatEntity
     void Start()
     {
         lastPosition = transform.position;
+        effectiveGlobalCooldown = globalCooldown;
         //currentTarget = FindNearestEnemy();
         OnHealthChanged += HandleHitAnimations;
         OnAutoAttack += () => playerAnim.SetTrigger("Attack");
@@ -156,7 +162,7 @@ public class PlayerCombatEntity : CombatEntity
         LookAtTarget();
         HandleInputs();
         HandleCooldowns();
-        if(characterData.autoRegenerate)
+        if(characterData.resourceType.AutoRegenerate)
             UpdateResourceRegen();
         
 
@@ -186,7 +192,7 @@ public class PlayerCombatEntity : CombatEntity
 
     protected override void PerformAutoAttack()
     {
-        if(characterData.restoreOnAutoAttack)
+        if(characterData.resourceType.RestoreOnAutoAttack)
             RestoreResource(regenPerSecond);
         
         base.PerformAutoAttack();
@@ -217,8 +223,9 @@ public class PlayerCombatEntity : CombatEntity
 
     #region Spells
     private void TriggerGlobalCooldown()
-    {
-        globalCooldownTimer = globalCooldown;
+    { 
+        globalCooldownTimer = characterData.resourceType.GetEffectiveGCD(globalCooldown, thresholdMet);
+        effectiveGlobalCooldown = globalCooldownTimer;
     }
 
     public void TryCastSpell(AbilityInstance spell)
@@ -226,14 +233,19 @@ public class PlayerCombatEntity : CombatEntity
         if (spell.GetCooldownRemaining() > 0) return;
         if (!HasResource(spell)) return;
         
-
-        
         bool isResurrect = spell.ability is ResAbility;
+        bool isThreshold = spell.ability is ThresholdAbility;
         CombatEntity target = currentTarget;
+        
 
         if (isResurrect)
         {
             if (target == null ||!target.IsDead) return;
+            target = currentTarget;
+        }
+        else if (isThreshold)
+        {
+            if (target == null || target.IsDead || !thresholdMet) return;
             target = currentTarget;
         }
         else if (spell.ability.targetType == AbilityTargetType.Self)
@@ -274,6 +286,7 @@ public class PlayerCombatEntity : CombatEntity
         
         float castTime = spell.GetModifiedCastTime();
         float resourceCost = spell.GetModifiedResourceCost();
+        float resourceGained = spell.GetModifiedResourceGained();
         
         BeginCasting(spell.ability.abilityName, castTime);
         bool isResurrect = spell.ability is ResAbility;
@@ -309,6 +322,7 @@ public class PlayerCombatEntity : CombatEntity
         }
         
         ConsumeResource(resourceCost);
+        RestoreResource(resourceGained);
         spell.ConsumeEmpowerments();
         var attackVfx = Instantiate(attackParticles, target.transform.position + Vector3.up *0.5f, transform.rotation);
         Destroy(attackVfx, 2f);
@@ -342,19 +356,21 @@ public class PlayerCombatEntity : CombatEntity
    
     bool HasResource(AbilityInstance spell)
     {
-        return currentResource >= spell.ability.resourceCost;
+        return currentResource >= spell.GetModifiedResourceCost();
     }
 
     void ConsumeResource(float amount)
     {
+        if(amount <= 0) return;
         currentResource = Mathf.Max(0, currentResource - amount);
-        OnResourceChanged?.Invoke(currentResource);
+        OnResourceChanged?.Invoke(currentResource, maxResoruce);
     }
 
     public void RestoreResource(float amount)
     {
+        if(amount <= 0) return;
         currentResource = Mathf.Min(currentResource + amount, maxResoruce);
-        OnResourceChanged?.Invoke(currentResource);
+        OnResourceChanged?.Invoke(currentResource, maxResoruce);
     }
 
     void UpdateResourceRegen()
@@ -370,6 +386,13 @@ public class PlayerCombatEntity : CombatEntity
     {
         RestoreResource(regenPerSecond);
     }
+
+    void SetThreshhold(float current, float max)
+    {
+        thresholdMet = characterData.resourceType.IsThresholdActive(current, max);
+    }
+
+
     #endregion
     
     #region Animations

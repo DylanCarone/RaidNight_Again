@@ -17,18 +17,18 @@ MonoBehaviour:
   description: Ability description
   animation: 0
   resourceType: 0
-  resourceCost: 0
-  targetType: 0
+  resourceCost: 15
+  targetType: 2
   damage: 0
   healing: 0
   castTime: 0
   cooldown: 0
-  range: 0
+  range: 25
   isOnGDC: 1
-  damagePerTick: 20
-  dotDuration: 10
+  damagePerTick: 125
+  dotDuration: 18
   dotTickRate: 1
-  visualEffectPrefab: {fileID: 0}
-  stackBonusEffectName: BurnBonus
-  bonusStackChance: 0.5
+  visualEffectPrefab: {fileID: 4718697377525663345, guid: 0d3a2dc2176fee345b9d92ac7a089808, type: 3}
+  stackBonusEffectName: Fireball
+  bonusStackChance: 0.25
   bonusStackCount: 1

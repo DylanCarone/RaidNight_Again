@@ -7,6 +7,7 @@ public abstract class AbilityEmpowerment : ScriptableObject
     public Sprite empowermentIcon;
     
     public virtual float ModifyResourceCost(float originalCost) => originalCost;
+    public virtual float ModifyResourceGain(float originalGain) => originalGain;
     public virtual float ModifyDamage(float originalDamage) => originalDamage;
     public virtual float ModifyCastTime(float originalCastTime) => originalCastTime;
 

@@ -25,19 +25,7 @@ public class ResourceBar : MonoBehaviour
     void ChangeColor()
     {
         var playerResource = player.ResourceType;
-        switch (playerResource)
-        {
-            case ResourceType.Mana:
-                fillArea.color = MyPalette.ManaBlue;
-                break;
-            case ResourceType.Rage:
-                fillArea.color = MyPalette.RageRed;
-                break;
-            case ResourceType.Energy:
-                fillArea.color = MyPalette.EnergyYellow;
-                break;
-            
-        }
+        fillArea.color = playerResource.ResourceColor;
     }
 
     private void OnDisable()
@@ -46,7 +34,7 @@ public class ResourceBar : MonoBehaviour
     }
 
 
-    private void UpdateResource(float current)
+    private void UpdateResource(float current, float max)
     {
         resourceBar.maxValue = player.MaxResoruce;
         ChangeColor();

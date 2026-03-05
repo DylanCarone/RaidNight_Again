@@ -41,6 +41,27 @@ public class StatusEffectManager : MonoBehaviour
         OnEffectApplied?.Invoke(dot);
     }
 
+    public void ApplyDotProc(CombatEntity caster, CombatEntity target, DotProcAbility ability,
+        PlayerCombatEntity player)
+    {
+        StatusEffect existingEffect = GetEffectByName(ability.abilityName);
+        if (existingEffect != null)
+        {
+            existingEffect.Refresh();
+            return;
+        }
+        
+        GameObject effectObj = new GameObject($"DoT_{ability.abilityName}");
+        effectObj.transform.SetParent(target.transform);
+        
+        DotProcEffect dot = effectObj.AddComponent<DotProcEffect>();
+        
+        dot.SetProcConfig(player, ability.abilityToBuff, ability.empowerments, ability.procChance, ability.maxStacks);
+        dot.Initialize(caster, target, ability.abilityName, ability.dotDuration, ability.damagePerTick, ability.dotTickRate, ability.visualEffectPrefab, ability.icon);
+        activeEffects.Add(dot);
+        OnEffectApplied?.Invoke(dot);
+    }
+
     public void ApplyHoT(CombatEntity caster, CombatEntity target, HotAbility ability)
     {
         StatusEffect existingEffect = GetEffectByName(ability.abilityName);
@@ -58,6 +79,7 @@ public class StatusEffectManager : MonoBehaviour
         hot.Initialize(caster, target, ability.abilityName, ability.hotDuration,  ability.healingPerTick,
             ability.hotTickRate, ability.visualEffectPrefab);
         activeEffects.Add(hot);
+        OnEffectApplied?.Invoke(hot);
         
     }
 
@@ -76,6 +98,7 @@ public class StatusEffectManager : MonoBehaviour
         BuffEffect buff = effectObj.AddComponent<BuffEffect>();
         buff.Initialize(caster, target,  ability.abilityName, ability.buffDuration,ability.buffType, ability.buffAmount, ability.visualEffectPrefab);
         activeEffects.Add(buff);
+        OnEffectApplied?.Invoke(buff);
     }
 
     public bool HasEffect(string effectName)

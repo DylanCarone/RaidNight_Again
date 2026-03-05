@@ -24,10 +24,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d427e39ad8d5bf94b92b27c1e11bc8bd, type: 2}
   - {fileID: 11400000, guid: d427e39ad8d5bf94b92b27c1e11bc8bd, type: 2}
   - {fileID: 11400000, guid: d427e39ad8d5bf94b92b27c1e11bc8bd, type: 2}
-  resourceType: 1
-  maxResource: 100
-  regenPerSecond: 5
-  startFull: 0
-  autoRegenerate: 0
-  restoreOnAutoAttack: 1
-  restoreResourceOnHit: 1
+  resourceType: {fileID: 11400000, guid: dbce40ecafd0ad64ea9da16dcd0c54b2, type: 2}

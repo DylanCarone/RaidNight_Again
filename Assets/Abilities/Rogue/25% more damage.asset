@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: 2 sec reducion
-  m_EditorClassIdentifier: Assembly-CSharp::CastReductionEmpowerment
-  empowermentName: 
+  m_Name: 25% more damage
+  m_EditorClassIdentifier: Assembly-CSharp::AmplifyEmpowerment
+  empowermentName: 25% bonus
   empowermentIcon: {fileID: 0}
-  flatReduction: 2
+  flatDamageIncrease: 0
+  multiplier: 1.25

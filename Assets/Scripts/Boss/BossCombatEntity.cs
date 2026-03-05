@@ -168,7 +168,7 @@ public abstract class BossCombatEntity : CombatEntity
             {
                 case AttackType.AreaAOE:
                     aoeVisual.localScale = new Vector3(ability.range * 2, 0.2f, ability.range * 2);
-                    yield break;
+                    break;
                 case AttackType.LineAOE:
                     Vector3 center = transform.position + transform.forward * (ability.range / 2f);
                     Vector3 halfExtents = new Vector3(ability.range / 2f, 0.25f, ability.range / 2f);
@@ -385,7 +385,7 @@ public abstract class BossCombatEntity : CombatEntity
         }
         
         agent.SetDestination(transform.position);
-        currentTelegraph.SetActive(false);
+        currentTelegraph?.SetActive(false);
 
         bossUI.SetActive(false);
         base.Die();

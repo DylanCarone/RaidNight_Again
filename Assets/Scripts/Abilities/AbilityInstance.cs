@@ -84,6 +84,17 @@ public class AbilityInstance
 
         return cost;
     }
+    
+    public float GetModifiedResourceGained()
+    {
+        float gain = ability.resourceGain;
+        foreach (var e in activeEmpowerments)
+        {
+            gain = e.ModifyResourceGain(gain);
+        }
+
+        return gain;
+    }
     public float GetModifiedCastTime()
     {
         float castTime = ability.castTime;

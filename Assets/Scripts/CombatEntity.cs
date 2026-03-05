@@ -153,7 +153,8 @@ public abstract class CombatEntity : MonoBehaviour
             damage = shield.AbsorbDamage(damage);
             if(damage <= 0) return;
         }
-
+        
+        
         currentHealth = Mathf.Max(0, currentHealth - (damage * currentDamageReduction));
         
         OnHealthChanged?.Invoke(currentHealth, maxHealth);

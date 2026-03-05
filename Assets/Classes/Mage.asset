@@ -22,12 +22,6 @@ MonoBehaviour:
   abilities:
   - {fileID: 11400000, guid: 6a2e71a0197fa524684cb45901b3c528, type: 2}
   - {fileID: 11400000, guid: 79824676bf016d64684a5e06e99c87a3, type: 2}
-  - {fileID: 11400000, guid: f2f59b14ff9fac545b358b6166792e90, type: 2}
+  - {fileID: 11400000, guid: 7f9fbc07414a5014abea88c05bdb30b4, type: 2}
   - {fileID: 11400000, guid: b218517dd99049a4882f542d90ebe19f, type: 2}
-  resourceType: 0
-  maxResource: 100
-  regenPerSecond: 3
-  startFull: 1
-  autoRegenerate: 1
-  restoreOnAutoAttack: 0
-  restoreResourceOnHit: 0
+  resourceType: {fileID: 11400000, guid: dbce40ecafd0ad64ea9da16dcd0c54b2, type: 2}

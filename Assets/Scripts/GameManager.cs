@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
     {
         if (gameOver)
         {
-            if ((Keyboard.current.spaceKey.wasPressedThisFrame || Gamepad.current.startButton.wasPressedThisFrame) && canRestart)
+            if ((Keyboard.current.spaceKey.wasPressedThisFrame || Gamepad.current?.startButton.wasPressedThisFrame == true) && canRestart)
             {
                 SceneManager.LoadScene(0);
             }

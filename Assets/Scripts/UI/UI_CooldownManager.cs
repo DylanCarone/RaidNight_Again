@@ -9,7 +9,8 @@ public class UI_CooldownManager : MonoBehaviour
 {
     [Header("Settings")] [SerializeField] private PlayerCombatEntity player;
 
-    [Header("Spells")] [SerializeField] private SpellUI squareSpell;
+    [Header("Spells")] 
+    [SerializeField] private SpellUI squareSpell;
     [SerializeField] private SpellUI triangleSpell;
     [SerializeField] private SpellUI circleSpell;
     [SerializeField] private SpellUI xSpell;
@@ -62,9 +63,6 @@ public class UI_CooldownManager : MonoBehaviour
         {
             if (spell.globalCooldownOverlay != null && spell.globalCooldownOverlay.enabled)
                 spell.globalCooldownOverlay.fillAmount = gcdPercent;
-
-
-
         }
     }
 }
@@ -93,9 +91,9 @@ public class UI_CooldownManager : MonoBehaviour
             maxStacks = 0;
             foreach (var s in allSpells)
             {
-                if (s.ability is ProcAbility proc && proc.abilityToBuff == spell.ability)
+                if (s.ability is IStackingAbility stackAbility && stackAbility.AbilityToBuff == spell.ability)
                 {
-                    maxStacks = proc.maxStacks;
+                    maxStacks = stackAbility.MaxStacks;
                     break;
                 }
             }
@@ -121,12 +119,11 @@ public class UI_CooldownManager : MonoBehaviour
         public void UpdateOutOfMana(PlayerCombatEntity player)
         {
             if (outOfManaOverlay != null)
-                outOfManaOverlay.enabled = player.CurrentResource < currentSpell.ability.resourceCost;
+                outOfManaOverlay.enabled = player.CurrentResource < currentSpell.GetModifiedResourceCost();
         }
 
         public void UpdateEmpowermentUI(List<AbilityEmpowerment> empowerments)
         {
-            Debug.Log($"{currentSpell} max stacks : {maxStacks}");
             if (maxStacks <= 0)
             {
                 empowermentIndicator.gameObject.SetActive(false);
@@ -135,7 +132,6 @@ public class UI_CooldownManager : MonoBehaviour
             }
 
             int currentStacks = empowerments.Count > 0 ? Enumerable.Count(empowerments,e => e == empowerments[0]) : 0;
-
             bool hasStacks = currentStacks > 0;
             bool isMaxStacks = currentStacks >= maxStacks;
 

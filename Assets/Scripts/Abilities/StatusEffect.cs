@@ -96,7 +96,6 @@ public abstract class StatusEffect : MonoBehaviour
 
     public void RemoveEffect()
     {
-        OnRemoved();
         
         StopAllCoroutines();
         

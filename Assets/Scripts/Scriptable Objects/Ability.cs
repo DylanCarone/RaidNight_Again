@@ -12,8 +12,8 @@ public class Ability : ScriptableObject
     
     public SpecialAnimations animation;
 
-    public ResourceType resourceType;
     public float resourceCost;
+    public float resourceGain;
     
     public AbilityTargetType targetType;
     public float damage;
@@ -38,9 +38,14 @@ public class Ability : ScriptableObject
             healTarget.Heal(healing);
         }
         
-        
     }
 
+}
+
+[CreateAssetMenu(fileName = "New Threshold Ability", menuName = "Combat/Special Abilities/Threshold Ability")]
+public class ThresholdAbility : Ability
+{
+    
 }
 
 

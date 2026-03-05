@@ -135,7 +135,7 @@ public class LobbyManager : MonoBehaviour
                 }
             }
         }
-        numPlayers++;
+        numPlayers--;
     }
     
     void AddCharactersToOtherPanels(CharacterData selectedCharacter)

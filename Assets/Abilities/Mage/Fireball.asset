@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Ability description
   animation: 0
   resourceType: 0
-  resourceCost: 8
+  resourceCost: 5
   targetType: 2
   damage: 150
   healing: 0
@@ -25,8 +25,9 @@ MonoBehaviour:
   cooldown: 0
   range: 25
   isOnGDC: 1
-  procChance: 0.2
+  procChance: 1
   abilityToBuff: {fileID: 11400000, guid: 79824676bf016d64684a5e06e99c87a3, type: 2}
   empowerments:
-  - {fileID: 11400000, guid: 417db7b9f7f3a814f84ff5e991382f88, type: 2}
-  - {fileID: 11400000, guid: 5793f06981bb7c340a148db3e3310dec, type: 2}
+  - {fileID: 11400000, guid: de18b9ab1ed344640bfe9da3a2d395b8, type: 2}
+  - {fileID: 11400000, guid: 4d8d737f33e60df4d8507f0e392a5c6c, type: 2}
+  maxStacks: 3

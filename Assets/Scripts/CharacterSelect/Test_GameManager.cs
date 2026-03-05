@@ -51,7 +51,7 @@ public class Test_GameManager : MonoBehaviour
                     player3.Initialize(data.characterData, data.GetComponent<PlayerInput>(), model);
                     player3UI.Initialize(player3);
                     break;
-                case 4:
+                case 3:
                     player4.gameObject.SetActive(true);
                     model = Instantiate(data.characterData.playerModel, player4Spawn.position, player4Spawn.rotation, player4Spawn);
                     player4.Initialize(data.characterData, data.GetComponent<PlayerInput>(), model);

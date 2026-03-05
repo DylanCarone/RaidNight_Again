@@ -4,13 +4,16 @@ using UnityEngine;
 
 
 [CreateAssetMenu(fileName = "New Proc Ability", menuName = "Combat/Special Abilities/Proc Ability")]
-public class ProcAbility : Ability
+public class ProcAbility : Ability, IStackingAbility
 {
     [Header("Proc Config")] [Range(0f, 1f)] public float procChance = 0.2f;
     public Ability abilityToBuff;
     public List<AbilityEmpowerment> empowerments;
 
     public int maxStacks = 3;
+    
+    public Ability AbilityToBuff=>abilityToBuff;
+    public int MaxStacks=> maxStacks;
 
     public override void ExecuteAbility(CombatEntity caster, CombatEntity target)
     {
