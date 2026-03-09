@@ -324,8 +324,8 @@ public class PlayerCombatEntity : CombatEntity
         ConsumeResource(resourceCost);
         RestoreResource(resourceGained);
         spell.ConsumeEmpowerments();
-        var attackVfx = Instantiate(attackParticles, target.transform.position + Vector3.up *0.5f, transform.rotation);
-        Destroy(attackVfx, 2f);
+        //var attackVfx = Instantiate(attackParticles, target.transform.position + Vector3.up *0.5f, transform.rotation);
+        //Destroy(attackVfx, 2f);
         
         playerAnim.SetTrigger(spell.ability.animation.ToString());
         spell.StartCooldown();

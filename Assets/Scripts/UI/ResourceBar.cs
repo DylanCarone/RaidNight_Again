@@ -18,14 +18,15 @@ public class ResourceBar : MonoBehaviour
         resourceBar.maxValue = player.MaxResoruce;
         resourceBar.value = player.CurrentResource;
         player.OnResourceChanged += UpdateResource;
-        ChangeColor();
+        //ChangeColor();
         
     }
 
     void ChangeColor()
     {
         var playerResource = player.ResourceType;
-        fillArea.color = playerResource.ResourceColor;
+        if(fillArea != null)
+            fillArea.color = playerResource.ResourceColor;
     }
 
     private void OnDisable()
@@ -48,6 +49,7 @@ public static class MyPalette
     public static readonly Color ManaBlue = HexToColor("64A8EE");
     public static readonly Color RageRed = HexToColor("E06772");
     public static readonly Color EnergyYellow = HexToColor("F1E953");
+    public static readonly Color Wrath = HexToColor("CCDFE6");
 
     private static Color HexToColor(string hex)
     {

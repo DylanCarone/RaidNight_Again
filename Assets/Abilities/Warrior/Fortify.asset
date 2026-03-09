@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c677c6a50189dc94fa552517f66a69b6, type: 3}
+  m_Name: Fortify
+  m_EditorClassIdentifier: Assembly-CSharp::BuffAbility
+  abilityName: Fortify
+  icon: {fileID: 21300000, guid: 4a64abc12d55157498c24f7095f4968e, type: 3}
+  description: Reduces the amount of damage taken by 35% for 8 seconds
+  animation: 1
+  resourceCost: 0
+  resourceGain: 0
+  targetType: 0
+  damage: 0
+  healing: 0
+  castTime: 0
+  cooldown: 12
+  range: 3
+  isOnGDC: 1
+  buffType: 3
+  buffAmount: 0.35
+  buffDuration: 8
+  visualEffectPrefab: {fileID: 0}

@@ -32,6 +32,7 @@ public class DoTWithStackBonusAbility  : DoTAbility
     [Range(0,1)] public float bonusStackChance = 0.5f;
 
     public int bonusStackCount = 1;
+    public AbilityEmpowerment stackEmpowerment;
     
 
 
@@ -53,26 +54,26 @@ public class DoTWithStackBonusAbility  : DoTAbility
         }
 
         // If already active, refresh it (so recasting the DoT refreshes the bonus too)
-        StatusEffect existing = playerManager.GetEffectByName(abilityName);
+        StatusEffect existing = playerManager.GetEffectByName(stackEmpowerment.empowermentName);
         if (existing != null)
         {
             existing.Refresh();
-            Debug.Log($"[DoTWithStackBonus] Refreshed {abilityName} on {caster.name}");
+            Debug.Log($"[DoTWithStackBonus] Refreshed {stackEmpowerment.empowermentName} on {caster.name}");
             return;
         }
 
         float duration = dotDuration;
 
         // The StackBonusEffect lives on the player (caster), targeting themselves
-        GameObject effectObj = new GameObject($"StackBonus_{abilityName}");
+        GameObject effectObj = new GameObject($"StackBonus_{stackEmpowerment.empowermentName}");
         effectObj.transform.SetParent(caster.transform);
 
         StackBonusEffect bonusEffect = effectObj.AddComponent<StackBonusEffect>();
-        bonusEffect.Initialize(caster, caster, abilityName, duration, bonusStackChance, bonusStackCount);
+        bonusEffect.Initialize(caster, caster, stackEmpowerment.empowermentName, duration, bonusStackChance, bonusStackCount);
 
         playerManager.activeEffects.Add(bonusEffect);
 
-        Debug.Log($"[DoTWithStackBonus] Applied {abilityName} to {caster.name} for {duration}s");
+        Debug.Log($"[DoTWithStackBonus] Applied {stackEmpowerment.empowermentName} to {caster.name} for {duration}s");
     }
 }
 

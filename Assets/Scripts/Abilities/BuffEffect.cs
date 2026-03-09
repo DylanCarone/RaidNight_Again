@@ -13,6 +13,7 @@ public class BuffEffect : StatusEffect
 
     public Action<bool> OnShieldChanged;
 
+
     public void Initialize(CombatEntity caster, CombatEntity target, string name, float duration,
         BuffType buffType, float buffAmount, GameObject effectPrefab)
     {
@@ -31,6 +32,10 @@ public class BuffEffect : StatusEffect
     protected override void OnApplied()
     {
         ApplyBuff();
+        if (visualEffectPrefab != null)
+        {
+            visualEffectInstance = Instantiate(visualEffectPrefab, target.transform.position + Vector3.down, Quaternion.identity, caster.transform);
+        }
     }
 
     protected override void OnRefresh()
@@ -53,6 +58,7 @@ public class BuffEffect : StatusEffect
     protected override void OnExpired()
     {
         RemoveBuff();
+        
     }
 
     protected override void OnRemoved()
@@ -93,7 +99,7 @@ public class BuffEffect : StatusEffect
         switch (buffType)
         {
             case BuffType.DamageReduction:
-                target.ResetDamageReduction();
+                target.ResetDamageReduction(amount);
                 break;
             case BuffType.Shield:
                 Debug.Log($"{target.name} lost the shield");

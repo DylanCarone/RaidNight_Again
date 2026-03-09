@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbe3b2f43df52fd45863c06b4ef3bc90, type: 3}
+  m_Name: Renewal
+  m_EditorClassIdentifier: Assembly-CSharp::Ability
+  abilityName: Renewal
+  icon: {fileID: 21300000, guid: d9642d35276d20747b35189ffe1288ea, type: 3}
+  description: Heals the target for a large amount. 12s cooldown
+  animation: 0
+  resourceCost: 17
+  resourceGain: 0
+  targetType: 1
+  damage: 0
+  healing: 500
+  castTime: 0
+  cooldown: 12
+  range: 15
+  isOnGDC: 1

@@ -17,10 +17,12 @@ public class Test_GameManager : MonoBehaviour
     [SerializeField] PlayerCombatEntity player3;
     [SerializeField] Transform player3Spawn;
     [SerializeField] private UI_CooldownManager player3UI;
+    [SerializeField] private bool debugPlayer3 = false;
     [Header("Player 4")]
     [SerializeField] PlayerCombatEntity player4;
     [SerializeField] Transform player4Spawn;
     [SerializeField] private UI_CooldownManager player4UI;
+    [SerializeField] private bool debugPlayer4 = false;
 
     [Header("Boss")] [SerializeField] private BossCombatEntity boss; 
     
@@ -62,6 +64,11 @@ public class Test_GameManager : MonoBehaviour
                     break;
                     
             }
+        }
+
+        if (debugPlayer2)
+        {
+            player2UI.Initialize(player2);
         }
         
         

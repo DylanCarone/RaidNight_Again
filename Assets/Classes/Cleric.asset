@@ -20,8 +20,8 @@ MonoBehaviour:
   attackDamage: 0
   attackRange: 0
   abilities:
-  - {fileID: 11400000, guid: d427e39ad8d5bf94b92b27c1e11bc8bd, type: 2}
-  - {fileID: 11400000, guid: d427e39ad8d5bf94b92b27c1e11bc8bd, type: 2}
-  - {fileID: 11400000, guid: d427e39ad8d5bf94b92b27c1e11bc8bd, type: 2}
-  - {fileID: 11400000, guid: d427e39ad8d5bf94b92b27c1e11bc8bd, type: 2}
-  resourceType: {fileID: 11400000, guid: dbce40ecafd0ad64ea9da16dcd0c54b2, type: 2}
+  - {fileID: 11400000, guid: fd1095f947f127b468a6c50fd3e31647, type: 2}
+  - {fileID: 11400000, guid: 2b7fd0d597392a442bfda664cd12df95, type: 2}
+  - {fileID: 11400000, guid: 6dca6dcb06ab5dd4ab48cc3bfa875f39, type: 2}
+  - {fileID: 11400000, guid: 5639df3f49e9c274c99880d87c2ee8b9, type: 2}
+  resourceType: {fileID: 11400000, guid: e3dc36b76263a574981f182c2ed112fd, type: 2}

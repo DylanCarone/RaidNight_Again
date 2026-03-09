@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c677c6a50189dc94fa552517f66a69b6, type: 3}
+  m_Name: Mana Surge
+  m_EditorClassIdentifier: Assembly-CSharp::BuffAbility
+  abilityName: Mana Surge
+  icon: {fileID: 21300000, guid: 068d84a881e507d49ac335f78a423c74, type: 3}
+  description: Restores mana over 6 seconds
+  animation: 0
+  resourceCost: 0
+  resourceGain: 0
+  targetType: 0
+  damage: 0
+  healing: 0
+  castTime: 0
+  cooldown: 30
+  range: 0
+  isOnGDC: 0
+  buffType: 5
+  buffAmount: 25
+  buffDuration: 6
+  visualEffectPrefab: {fileID: 0}

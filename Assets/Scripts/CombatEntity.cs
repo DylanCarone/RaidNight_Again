@@ -21,7 +21,8 @@ public abstract class CombatEntity : MonoBehaviour
     public float MaxHealth => maxHealth;
     public bool IsDead => isDead;
 
-
+    private List<float> damageReductionModifiers = new List<float>();
+    
 
     [Header("Combat")] [SerializeField] protected float attackSpeed = 2.5f;
     [SerializeField] protected float attackDamage = 100f;
@@ -144,6 +145,7 @@ public abstract class CombatEntity : MonoBehaviour
     {
         if (isDead) return;
         if(damage <= 0) return;
+        OnTakeDamage?.Invoke();
 
         List<BuffEffect> shields = statusEffectManager.GetEffectsOfType<BuffEffect>()
             .Where(b => b.BuffType == BuffType.Shield).ToList();
@@ -158,7 +160,7 @@ public abstract class CombatEntity : MonoBehaviour
         currentHealth = Mathf.Max(0, currentHealth - (damage * currentDamageReduction));
         
         OnHealthChanged?.Invoke(currentHealth, maxHealth);
-        OnTakeDamage?.Invoke();
+        
 
         if (currentHealth <= 0)
             Die();
@@ -176,11 +178,32 @@ public abstract class CombatEntity : MonoBehaviour
 
         return false;
     }
-
-    public void SetDamageReduction(float reduction) => currentDamageReduction = Mathf.Clamp(reduction, 0f, 1f);
     
+    // Call this whenever the list changes
+    private void RecalculateDamageReduction()
+    {
+        float totalReduction = 0f;
+        foreach (var mod in damageReductionModifiers)
+            totalReduction += mod;
 
-    public void ResetDamageReduction() => currentDamageReduction = maxDamageReduction;
+        currentDamageReduction = Mathf.Clamp(1-totalReduction, 0, maxDamageReduction);
+    }
+
+    public void SetDamageReduction(float reduction)
+    {
+        damageReductionModifiers.Add(reduction);
+        RecalculateDamageReduction();
+        
+    }
+
+
+
+    public void ResetDamageReduction(float reduction)
+    {
+        damageReductionModifiers.Remove(reduction);
+        RecalculateDamageReduction();
+    }
+
 
     public void Heal(float amount)
     {

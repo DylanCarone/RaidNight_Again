@@ -24,6 +24,8 @@ public class BuffAbility : Ability
         if (manager != null)
         {
             manager.ApplyBuff(caster, target, this);
+            
+                
         }
         
         

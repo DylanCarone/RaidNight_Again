@@ -22,7 +22,6 @@ public class GolemBoss : BossCombatEntity
             yield return UseAttack(balls);
             yield return new WaitForSeconds(4);
             yield return UseAttack(slam);
-            yield return new WaitForSeconds(60);
             
 
 

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c677c6a50189dc94fa552517f66a69b6, type: 3}
+  m_Name: Iron Bulwark
+  m_EditorClassIdentifier: Assembly-CSharp::BuffAbility
+  abilityName: Iron Bulwark
+  icon: {fileID: 21300000, guid: ca46f8a7b76c0404d8ed71430dcaaebb, type: 3}
+  description: Grants a temporary shield that aborbs a large amount of incoming damage.
+  animation: 0
+  resourceCost: 0
+  resourceGain: 0
+  targetType: 0
+  damage: 0
+  healing: 0
+  castTime: 0
+  cooldown: 20
+  range: 3
+  isOnGDC: 1
+  buffType: 4
+  buffAmount: 750
+  buffDuration: 18
+  visualEffectPrefab: {fileID: 6424583148328831481, guid: db4006fe60f143843ace643ad4498222, type: 3}

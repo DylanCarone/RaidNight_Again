@@ -106,6 +106,8 @@ public abstract class StatusEffect : MonoBehaviour
         if(visualEffectInstance != null)
             Destroy(visualEffectInstance);
         
+        OnRemoved();
+        
         // notify the statusEffectManager and remove this effect
     }
     
