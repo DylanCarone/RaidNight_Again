@@ -2476,6 +2476,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GolemBoss
   type: 1
   maxHealth: 20000
+  maxDamageReduction: 1
   attackSpeed: 2
   attackDamage: 100
   attackRange: 4
@@ -2487,6 +2488,8 @@ MonoBehaviour:
     m_Bits: 64
   raidWide:
     abilityName: Blowup
+    particleEffect: {fileID: 0}
+    spawnPrefab: {fileID: 0}
     attackType: 1
     castTime: 3
     damage: 100
@@ -2495,6 +2498,8 @@ MonoBehaviour:
     animation: 1
   slam:
     abilityName: Slam-a-ram
+    particleEffect: {fileID: 0}
+    spawnPrefab: {fileID: 0}
     attackType: 0
     castTime: 2
     damage: 400
@@ -2503,14 +2508,28 @@ MonoBehaviour:
     animation: 0
   blastoff:
     abilityName: Blastoff
+    particleEffect: {fileID: 0}
+    spawnPrefab: {fileID: 0}
     attackType: 1
     castTime: 3
     damage: 100
     range: 0
     isInterruptible: 1
     animation: 1
+  balls:
+    abilityName: 
+    particleEffect: {fileID: 0}
+    spawnPrefab: {fileID: 0}
+    attackType: 0
+    castTime: 0
+    damage: 0
+    range: 0
+    isInterruptible: 0
+    animation: 0
   shockWave:
     abilityName: Shockwaver
+    particleEffect: {fileID: 0}
+    spawnPrefab: {fileID: 0}
     attackType: 2
     castTime: 4
     damage: 100
@@ -2521,6 +2540,8 @@ MonoBehaviour:
     lineOfSight: 1
   overdrive:
     abilityName: Overdrive
+    particleEffect: {fileID: 0}
+    spawnPrefab: {fileID: 0}
     attackType: 3
     castTime: 3
     damage: 200
@@ -2529,6 +2550,7 @@ MonoBehaviour:
     animation: 1
     telegraphVisual: {fileID: 205757575}
     lineOfSight: 0
+  tests: []
 --- !u!1 &765570212
 GameObject:
   m_ObjectHideFlags: 0
@@ -3083,23 +3105,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_CooldownManager
   player: {fileID: 928787031}
-  squareIcon: {fileID: 418784771}
-  triangleIcon: {fileID: 1204153453}
-  circleIcon: {fileID: 2027659684}
-  xIcon: {fileID: 922770238}
-  squareCooldown: {fileID: 1891121867}
-  triangleCooldown: {fileID: 1656129328}
-  circleCooldown: {fileID: 1303894677}
-  xCooldown: {fileID: 720089940}
-  globalCooldownImages:
-  - {fileID: 652302030}
-  - {fileID: 296133837}
-  - {fileID: 976326566}
-  - {fileID: 1111880978}
-  squareOutOfRangeImage: {fileID: 38091445}
-  triOutOfRangeImage: {fileID: 660362029}
-  circleOutOfRangeImage: {fileID: 1471225145}
-  xOutOfRangeImage: {fileID: 316559852}
+  squareSpell:
+    icon: {fileID: 0}
+    cooldownOverlay: {fileID: 0}
+    globalCooldownOverlay: {fileID: 0}
+    outOfRangeOverlay: {fileID: 0}
+    outOfManaOverlay: {fileID: 0}
+    stackText: {fileID: 0}
+    empowermentIndicator: {fileID: 0}
+    maxStacks: 0
+  triangleSpell:
+    icon: {fileID: 0}
+    cooldownOverlay: {fileID: 0}
+    globalCooldownOverlay: {fileID: 0}
+    outOfRangeOverlay: {fileID: 0}
+    outOfManaOverlay: {fileID: 0}
+    stackText: {fileID: 0}
+    empowermentIndicator: {fileID: 0}
+    maxStacks: 0
+  circleSpell:
+    icon: {fileID: 0}
+    cooldownOverlay: {fileID: 0}
+    globalCooldownOverlay: {fileID: 0}
+    outOfRangeOverlay: {fileID: 0}
+    outOfManaOverlay: {fileID: 0}
+    stackText: {fileID: 0}
+    empowermentIndicator: {fileID: 0}
+    maxStacks: 0
+  xSpell:
+    icon: {fileID: 0}
+    cooldownOverlay: {fileID: 0}
+    globalCooldownOverlay: {fileID: 0}
+    outOfRangeOverlay: {fileID: 0}
+    outOfManaOverlay: {fileID: 0}
+    stackText: {fileID: 0}
+    empowermentIndicator: {fileID: 0}
+    maxStacks: 0
 --- !u!1 &878226483
 GameObject:
   m_ObjectHideFlags: 0
@@ -5530,23 +5571,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_CooldownManager
   player: {fileID: 928787031}
-  squareIcon: {fileID: 1540351414}
-  triangleIcon: {fileID: 986820920}
-  circleIcon: {fileID: 1554514110}
-  xIcon: {fileID: 2085224696}
-  squareCooldown: {fileID: 1814083870}
-  triangleCooldown: {fileID: 643874973}
-  circleCooldown: {fileID: 117867045}
-  xCooldown: {fileID: 357272361}
-  globalCooldownImages:
-  - {fileID: 1281676320}
-  - {fileID: 356796293}
-  - {fileID: 787050451}
-  - {fileID: 2137353454}
-  squareOutOfRangeImage: {fileID: 2066474160}
-  triOutOfRangeImage: {fileID: 1890988462}
-  circleOutOfRangeImage: {fileID: 523657360}
-  xOutOfRangeImage: {fileID: 1672465209}
+  squareSpell:
+    icon: {fileID: 0}
+    cooldownOverlay: {fileID: 0}
+    globalCooldownOverlay: {fileID: 0}
+    outOfRangeOverlay: {fileID: 0}
+    outOfManaOverlay: {fileID: 0}
+    stackText: {fileID: 0}
+    empowermentIndicator: {fileID: 0}
+    maxStacks: 0
+  triangleSpell:
+    icon: {fileID: 0}
+    cooldownOverlay: {fileID: 0}
+    globalCooldownOverlay: {fileID: 0}
+    outOfRangeOverlay: {fileID: 0}
+    outOfManaOverlay: {fileID: 0}
+    stackText: {fileID: 0}
+    empowermentIndicator: {fileID: 0}
+    maxStacks: 0
+  circleSpell:
+    icon: {fileID: 0}
+    cooldownOverlay: {fileID: 0}
+    globalCooldownOverlay: {fileID: 0}
+    outOfRangeOverlay: {fileID: 0}
+    outOfManaOverlay: {fileID: 0}
+    stackText: {fileID: 0}
+    empowermentIndicator: {fileID: 0}
+    maxStacks: 0
+  xSpell:
+    icon: {fileID: 0}
+    cooldownOverlay: {fileID: 0}
+    globalCooldownOverlay: {fileID: 0}
+    outOfRangeOverlay: {fileID: 0}
+    outOfManaOverlay: {fileID: 0}
+    stackText: {fileID: 0}
+    empowermentIndicator: {fileID: 0}
+    maxStacks: 0
 --- !u!224 &1485602996
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6437,23 +6497,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UI_CooldownManager
   player: {fileID: 928787031}
-  squareIcon: {fileID: 221602349}
-  triangleIcon: {fileID: 335555047}
-  circleIcon: {fileID: 550525413}
-  xIcon: {fileID: 367812189}
-  squareCooldown: {fileID: 409939908}
-  triangleCooldown: {fileID: 909996418}
-  circleCooldown: {fileID: 1471798219}
-  xCooldown: {fileID: 1127533292}
-  globalCooldownImages:
-  - {fileID: 1157887893}
-  - {fileID: 792952884}
-  - {fileID: 851391728}
-  - {fileID: 1519046349}
-  squareOutOfRangeImage: {fileID: 1987230593}
-  triOutOfRangeImage: {fileID: 1678823452}
-  circleOutOfRangeImage: {fileID: 1045383548}
-  xOutOfRangeImage: {fileID: 195302787}
+  squareSpell:
+    icon: {fileID: 0}
+    cooldownOverlay: {fileID: 0}
+    globalCooldownOverlay: {fileID: 0}
+    outOfRangeOverlay: {fileID: 0}
+    outOfManaOverlay: {fileID: 0}
+    stackText: {fileID: 0}
+    empowermentIndicator: {fileID: 0}
+    maxStacks: 0
+  triangleSpell:
+    icon: {fileID: 0}
+    cooldownOverlay: {fileID: 0}
+    globalCooldownOverlay: {fileID: 0}
+    outOfRangeOverlay: {fileID: 0}
+    outOfManaOverlay: {fileID: 0}
+    stackText: {fileID: 0}
+    empowermentIndicator: {fileID: 0}
+    maxStacks: 0
+  circleSpell:
+    icon: {fileID: 0}
+    cooldownOverlay: {fileID: 0}
+    globalCooldownOverlay: {fileID: 0}
+    outOfRangeOverlay: {fileID: 0}
+    outOfManaOverlay: {fileID: 0}
+    stackText: {fileID: 0}
+    empowermentIndicator: {fileID: 0}
+    maxStacks: 0
+  xSpell:
+    icon: {fileID: 0}
+    cooldownOverlay: {fileID: 0}
+    globalCooldownOverlay: {fileID: 0}
+    outOfRangeOverlay: {fileID: 0}
+    outOfManaOverlay: {fileID: 0}
+    stackText: {fileID: 0}
+    empowermentIndicator: {fileID: 0}
+    maxStacks: 0
 --- !u!1 &1890988459
 GameObject:
   m_ObjectHideFlags: 0
@@ -7002,7 +7081,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2001802294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7025,9 +7104,11 @@ MonoBehaviour:
   player3: {fileID: 1485182982}
   player3Spawn: {fileID: 1485182981}
   player3UI: {fileID: 869074704}
+  debugPlayer3: 0
   player4: {fileID: 2024082896}
   player4Spawn: {fileID: 2024082895}
   player4UI: {fileID: 1485602995}
+  debugPlayer4: 0
   boss: {fileID: 757194642}
 --- !u!4 &2001802295
 Transform:
@@ -7773,6 +7854,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TrainingDummy
   type: 1
   maxHealth: 1e+10
+  maxDamageReduction: 1
   attackSpeed: 0
   attackDamage: 0
   attackRange: 0

@@ -20,7 +20,7 @@ public class StatusEffectManager : MonoBehaviour
     
 
 
-    public void ApplyDoT(CombatEntity caster, CombatEntity target, DoTAbility ability)
+    public void ApplyDoT(CombatEntity caster, CombatEntity target, DotAbility ability)
     {
         StatusEffect existingEffect = GetEffectByName(ability.abilityName);
         

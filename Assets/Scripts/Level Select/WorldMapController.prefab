@@ -1,0 +1,147 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5907272674516320488
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1556430659265582458}
+  - component: {fileID: 3799104499428711062}
+  - component: {fileID: 3468537842527739185}
+  m_Layer: 0
+  m_Name: WorldMapController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1556430659265582458
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5907272674516320488}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3799104499428711062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5907272674516320488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c79ca4f33ffff7341a29ba6dd0b0f05f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldMapController
+  mapPlayer: {fileID: 0}
+  startNode: {fileID: 0}
+--- !u!114 &3468537842527739185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5907272674516320488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
+  m_Actions: {fileID: -944628639613478452, guid: 91a3c94d32f0348449dca680aafa3b7e, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e9da17b4-c5ff-48d7-bc08-a040c8ffaafc
+    m_ActionName: 'Gameplay/Movement[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 650c926f-7c08-4d52-8e88-882e950ad1ef
+    m_ActionName: 'Gameplay/Ability 1[/Keyboard/1]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f397bfd9-2827-41c0-b5a5-2d968dd2688e
+    m_ActionName: 'Gameplay/Ability 2[/Keyboard/2]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7885beae-3d1b-4674-8f4b-6abc804e2bf0
+    m_ActionName: 'Gameplay/Ability 3[/Keyboard/3]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a621cd07-001f-4506-8731-b5825e9d63e1
+    m_ActionName: 'Gameplay/Ability 4[/Keyboard/4]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d8dbeb3b-017d-4b8a-90ab-946158108cd4
+    m_ActionName: 'Gameplay/Ability 5[/Keyboard/5]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 73596f2e-ae3f-4d1b-b84e-7bca22a1d642
+    m_ActionName: 'Gameplay/Super Ability[/Keyboard/6]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 69598119-2b06-4e39-95d1-8c9fdae63da9
+    m_ActionName: Gameplay/Target North
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: be99ff1c-3e2f-4fab-a441-94f137b5938d
+    m_ActionName: Gameplay/Target South
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: db3c0c04-786a-485d-be80-418aa456642a
+    m_ActionName: Gameplay/Target East
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4f62010a-e1e9-463b-be19-0ef7bbe77ccc
+    m_ActionName: Gameplay/Target West
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b9db1d46-a8ba-440c-8d74-6e0638bc15b6
+    m_ActionName: 'UI/Navigate[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b1892535-403d-45ab-9207-f9210456e523
+    m_ActionName: 'UI/Submit[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 6c745cbc-7950-4800-b672-f6da7a47a11b
+    m_ActionName: 'UI/Cancel[/Keyboard/backspace]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 432ffc77-58e0-4f72-8b62-39366b62a4a1
+    m_ActionName: 'UI/Point[/Mouse/position]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 23e0b865-110c-42ce-bfb3-33b16158576d
+    m_ActionName: 'UI/Move Left[/Keyboard/a]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5a985390-d9e7-4214-9760-fd31395951f5
+    m_ActionName: 'UI/Move Right[/Keyboard/d]'
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: UI
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}

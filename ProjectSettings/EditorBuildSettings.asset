@@ -17,6 +17,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TrainingRoom.unity
     guid: df6cdc0a7e9298b43ad34d99f80effc9
+  - enabled: 1
+    path: Assets/Scenes/TrainingRoom_Single.unity
+    guid: 15faa4e3be3251546a41723d8fc9ece6
+  - enabled: 1
+    path: Assets/Scenes/World Map.unity
+    guid: ca9ff7998bc0c4a458ff77ffb32f6691
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 91a3c94d32f0348449dca680aafa3b7e, type: 3}
   m_UseUCBPForAssetBundles: 0

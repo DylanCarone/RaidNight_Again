@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 208e9ffff7efa244dacb4c9e4e75ed41, type: 3}
   m_Name: Energy
   m_EditorClassIdentifier: Assembly-CSharp::AdrenalineResource
-  maxResource: 100
+  maxResource: 0
   regenPerSecond: 0
   frenzyThreshold: 0.6
   frenzyGCD: 1.5

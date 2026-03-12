@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: 7b75a4b255960ee47a36b0a5883c752f, type: 3}
   m_Name: Mage Mana
   m_EditorClassIdentifier: Assembly-CSharp::ManaResource
-  maxResource: 280
-  regenPerSecond: 10
+  maxResource: 180
+  regenPerSecond: 14
