@@ -21,7 +21,7 @@ public abstract class StatusEffect : MonoBehaviour
     public float RemainingDuration => remainingDuration;
     public CombatEntity Caster => caster;
 
-    public virtual void Initialize(CombatEntity caster, CombatEntity target, string name, float duration, Sprite icon = null)
+    protected virtual void Initialize(CombatEntity caster, CombatEntity target, string name, float duration, Sprite icon = null)
     {
         this.caster = caster;
         this.target = target;

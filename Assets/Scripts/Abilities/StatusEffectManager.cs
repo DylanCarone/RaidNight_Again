@@ -96,7 +96,7 @@ public class StatusEffectManager : MonoBehaviour
         effectObj.transform.SetParent(target.transform);
         
         BuffEffect buff = effectObj.AddComponent<BuffEffect>();
-        buff.Initialize(caster, target,  ability.abilityName, ability.buffDuration,ability.buffType, ability.buffAmount, ability.visualEffectPrefab);
+        buff.Initialize(caster, target,  ability.abilityName, ability.buffDuration,ability.buffType, ability.buffAmount, ability.visualEffectPrefab, ability.icon);
         activeEffects.Add(buff);
         OnEffectApplied?.Invoke(buff);
     }

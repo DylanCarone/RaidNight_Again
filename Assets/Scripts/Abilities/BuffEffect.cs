@@ -15,7 +15,7 @@ public class BuffEffect : StatusEffect
 
 
     public void Initialize(CombatEntity caster, CombatEntity target, string name, float duration,
-        BuffType buffType, float buffAmount, GameObject effectPrefab)
+        BuffType buffType, float buffAmount, GameObject effectPrefab, Sprite icon)
     {
         
         this.buffType = buffType;
@@ -23,10 +23,11 @@ public class BuffEffect : StatusEffect
         this.visualEffectPrefab = effectPrefab;
         this.duration = duration;
         
+        
         if(buffType == BuffType.Shield)
             currentShieldAmount = amount;
         
-        base.Initialize(caster, target, name, duration);
+        base.Initialize(caster, target, name, duration, icon);
     }
 
     protected override void OnApplied()

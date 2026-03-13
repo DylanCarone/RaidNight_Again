@@ -28,11 +28,11 @@ public class WorldMapController : MonoBehaviour
         // Auto-register all paths in the scene
         foreach (var path in FindObjectsByType<WorldMapPath>(FindObjectsInactive.Exclude, FindObjectsSortMode.None))
         {
-            pathLookup[(path.fromNode, path.toNode)] = path;
-            pathLookup[(path.toNode, path.fromNode)] = path; // bidirectional
+            pathLookup[(path.FromNode, path.ToNode)] = path;
+            pathLookup[(path.ToNode, path.FromNode)] = path; // bidirectional
         }
 
-        mapPlayer.currentNode = startNode;
+        mapPlayer.CurrentNode = startNode;
         SetSelectedNode(startNode);
         mapPlayer.OnArrivedAtNode += OnPlayerArrived;
     }
@@ -71,9 +71,9 @@ public class WorldMapController : MonoBehaviour
         WorldMapNode best = null;
         float bestDot = -1f;
 
-        foreach (var neighbor in mapPlayer.currentNode.GetAccessibleNeighbors())
+        foreach (var neighbor in mapPlayer.CurrentNode.GetAccessibleNeighbors())
         {
-            Vector3 toNeighbor = (neighbor.transform.position - mapPlayer.currentNode.transform.position).normalized;
+            Vector3 toNeighbor = (neighbor.transform.position - mapPlayer.CurrentNode.transform.position).normalized;
             float dot = Vector3.Dot(inputDir, toNeighbor);
             if (dot > bestDot)
             {
@@ -89,9 +89,9 @@ public class WorldMapController : MonoBehaviour
 
     private void MoveToNode(WorldMapNode destination)
     {
-        if (!pathLookup.TryGetValue((mapPlayer.currentNode, destination), out WorldMapPath path))
+        if (!pathLookup.TryGetValue((mapPlayer.CurrentNode, destination), out WorldMapPath path))
         {
-            Debug.LogWarning($"No path found between {mapPlayer.currentNode.name} and {destination.name}");
+            Debug.LogWarning($"No path found between {mapPlayer.CurrentNode.name} and {destination.name}");
             return;
         }
         SetSelectedNode(destination);
