@@ -8,6 +8,7 @@ public class Test_GameManager : MonoBehaviour
     [SerializeField] PlayerCombatEntity player1;
     [SerializeField] Transform player1Spawn;
     [SerializeField] private UI_CooldownManager player1UI;
+    [SerializeField] private HealthBar player1HealthUI;
     [Header("Player 2")]
     [SerializeField] PlayerCombatEntity player2;
     [SerializeField] Transform player2Spawn;

@@ -30,8 +30,12 @@ public class HealthBar : MonoBehaviour
 
     }
 
+ 
+
     private void Update()
     {
+        healthBar.maxValue = entity.MaxHealth;
+        healthBar.value = entity.CurrentHealth;
         UpdateShieldBar();
     }
     private void UpdateShieldBar()
@@ -47,7 +51,7 @@ public class HealthBar : MonoBehaviour
             if (!shieldSlider.gameObject.activeSelf)
                 shieldSlider.gameObject.SetActive(true);
             
-            float combinedValue = (entity.CurrentHealth + totalShield) / entity.MaxHealth;
+            float combinedValue =  (entity.CurrentHealth + totalShield) /  entity.MaxHealth;
             //Debug.Log(combinedValue);
             shieldSlider.value = combinedValue;
         }

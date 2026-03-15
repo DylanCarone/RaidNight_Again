@@ -110,6 +110,11 @@ public class UI_CooldownManager : MonoBehaviour
 
         public void UpdateOutOfRange(PlayerCombatEntity player)
         {
+            if (currentSpell.ability.targetType == AbilityTargetType.Self)
+            {
+                outOfRangeOverlay.enabled = false;
+                return;
+            }
             if (outOfRangeOverlay != null)
                 outOfRangeOverlay.enabled = player.TargetRange > currentSpell.ability.range;
         }

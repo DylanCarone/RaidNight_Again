@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +23,12 @@ public class ResourceBar : MonoBehaviour
         
     }
 
+    private void Update()
+    {
+        resourceBar.maxValue = player.MaxResoruce;
+        resourceBar.value = player.CurrentResource;
+    }
+
     void ChangeColor()
     {
         var playerResource = player.ResourceType;
@@ -42,6 +49,7 @@ public class ResourceBar : MonoBehaviour
         resourceBar.value = current;
     }
 }
+
 
 
 public static class MyPalette
